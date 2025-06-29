@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ProductoService } from '../services/producto.service';
+import { ActivatedRoute } from '@angular/router';
+import { Producto } from '../interfaces/producto.interface';
 
 @Component({
   selector: 'app-detail-producto',
@@ -6,6 +9,36 @@ import { Component } from '@angular/core';
   templateUrl: './detail-producto.component.html',
   styleUrl: './detail-producto.component.css'
 })
-export class DetailProductoComponent {
+export class DetailProductoComponent implements OnInit, OnDestroy{
+  productoService = inject(ProductoService); 
 
+  activatedRouter = inject(ActivatedRoute);
+
+  id: number | null = null;
+
+  producto: Producto | undefined;
+
+  ngOnInit() {
+    this.id = Number(this.activatedRouter.snapshot.paramMap.get('id'))
+    this.getProducto();  
+  }
+
+  ngOnDestroy(): void {
+    
+  }
+
+  getProducto() {
+      this.productoService.getProducto(this.id).subscribe(
+        {
+          next : (data)=>{
+            this.producto = data;
+            console.log(data);
+          }, 
+
+        error: (err) => {},
+
+        complete: () => {}
+      }
+    );
+  }
 }
