@@ -1,0 +1,24 @@
+<div>
+    <nav class="bg-gray-800 p-4 text-left">
+    <ul class="flex space-x-4 text-white">
+      <li><a routerLink="/" class="hover:underline">Home</a></li>
+      <li><a routerLink="/products" class="hover:underline">Products</a></li>
+      <li><a routerLink="/cart" class="hover:underline">Cart</a></li>
+      <li><a routerLink="/login" class="hover:underline">Login</a></li>
+    </ul>
+  </nav>
+  <!-- <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <input type="text" formControlName="username" placeholder="Usuario" />
+  
+  <p-password formControlName="password" placeholder="Contraseña"></p-password>
+  
+  <button type="submit" [disabled]="formGroup.invalid">Iniciar sesión</button>
+</form> -->
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <input type="text" formControlName="username" placeholder="Usuario" class="mb-4 p-2 border rounded" />
+  <p-password formControlName="password" [feedback]="false" placeholder="Contraseña"></p-password>
+  <button type="submit" [disabled]="formGroup.invalid" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
+    Iniciar sesión
+  </button>
+</form>
+</div>
