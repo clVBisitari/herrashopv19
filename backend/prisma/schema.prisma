@@ -19,6 +19,8 @@ model Producto {
   descripcion   String
   clasificacion String
   precio        Float
+  stock         Int
+  imagen        String
 }
 model Usuario {
   id        Int     @id @default(autoincrement())
