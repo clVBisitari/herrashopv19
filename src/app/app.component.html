@@ -1,7 +1,28 @@
-<div class="container">
-  <div class="bg-blue-600 text-white p-4">
- <app-login></app-login>
+<div class="w-screen h-screen bg-gray-900">
+  <!-- <div class="bg-blue-600 text-white p-4"> -->
+  <div class="grid grid-cols-5 grid-rows-5 gap-4 h-full">
+    <!-- Header -->
+    <div class="col-span-5 bg-blue-200">
+      <h1 class="text-5xl text-center text-blue-900 font-extrabold">Herrashop</h1>
+      <app-login></app-login>
+    </div>
+
+    <!-- Cuerpo principal, ocupa 2 filas -->
+    <div class="col-span-5 row-span-2 row-start-2 bg-green-200">2</div>
+
+    <!-- Cinco ítems en la fila 4 -->
+    <div class="row-start-4 col-start-1 bg-yellow-200">3</div>
+    <div class="row-start-4 col-start-2 bg-yellow-200">4</div>
+    <div class="row-start-4 col-start-3 bg-yellow-200">5</div>
+    <div class="row-start-4 col-start-4 bg-yellow-200">6</div>
+    <div class="row-start-4 col-start-5 bg-yellow-200">7</div>
+
+    <!-- Footer -->
+    <div class="col-span-5 row-start-5 bg-red-200"><app-footer></app-footer></div>
+  </div>
 </div>
-  <h1 class="text-5xl text-center text-blue-900 font-extrabold">Herrashop</h1>
-</div>
+
+
+
+<!-- </div> -->
 <router-outlet></router-outlet>

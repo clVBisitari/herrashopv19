@@ -1,18 +1,24 @@
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PasswordModule } from 'primeng/password';  // Importing PasswordModule from PrimeNG
 import { HttpClient } from '@angular/common/http';  
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PasswordModule],
+  imports: [CommonModule, RouterLink ,ReactiveFormsModule, PasswordModule, InputTextModule, ButtonModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
+goToRegister() {
+throw new Error('Method not implemented.');
+}
   formGroup: FormGroup;
-
+  value3: string = ''; // Example variable for two-way binding  
   constructor(private fb: FormBuilder, private http: HttpClient) {
     console.log('FormBuilder:', this.fb);
     this.formGroup = this.fb.group({

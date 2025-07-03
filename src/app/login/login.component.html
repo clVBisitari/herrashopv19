@@ -1,24 +1,51 @@
-<div>
-    <nav class="bg-gray-800 p-4 text-left">
-    <ul class="flex space-x-4 text-white">
+<div class="flex items-center gap-4 bg-gray-800 p-6 rounded shadow w-full">
+
+  <nav class="flex items-center gap-4 bg-gray-800 p-4 text-white rounded">
+    <ul class="flex items-center gap-4">
+      <li><a routerLink="/" class="hover:text-orange-600 block">Home</a></li>
+      <li><a routerLink="/products" class="hover:text-orange-600 block">Products</a></li>
+      <li><a routerLink="/cart" class="hover:text-orange-600 block">Cart</a></li>
+      <li><a routerLink="/login" class="hover:text-orange-600 block">Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- FORM (solo los campos y el botón de envío) -->
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex items-right gap-4">
+    <input type="text" formControlName="username" placeholder="Usuario" class="p-3 border rounded" />
+
+    <p-password formControlName="password" [feedback]="false" placeholder="Contraseña"
+      inputClass="p-2 border rounded"></p-password>
+
+    <button type="submit" [disabled]="formGroup.invalid"
+      class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 hover:bg-orange-600">
+      Iniciar sesión
+    </button>
+  </form>
+
+  <!-- Botón Registrarse fuera del form, pero inline -->
+    <button type="submit" label="Registrarse" severity="secondary" icon="pi pi-user-plus" (onClick)="goToRegister()"
+      class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 hover:bg-orange-600">
+      Iniciar sesión
+    </button>
+</div>
+
+
+
+<!-- <nav class="col-span-2 row-start-2 bg-gray-800 text-white p-4 rounded shadow">
+    <ul class="flex flex-col space-y-2">
       <li><a routerLink="/" class="hover:underline">Home</a></li>
       <li><a routerLink="/products" class="hover:underline">Products</a></li>
       <li><a routerLink="/cart" class="hover:underline">Cart</a></li>
       <li><a routerLink="/login" class="hover:underline">Login</a></li>
     </ul>
   </nav>
-  <!-- <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <input type="text" formControlName="username" placeholder="Usuario" />
-  
-  <p-password formControlName="password" placeholder="Contraseña"></p-password>
-  
-  <button type="submit" [disabled]="formGroup.invalid">Iniciar sesión</button>
-</form> -->
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <input type="text" formControlName="username" placeholder="Usuario" class="mb-4 p-2 border rounded" />
-  <p-password formControlName="password" [feedback]="false" placeholder="Contraseña"></p-password>
-  <button type="submit" [disabled]="formGroup.invalid" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
-    Iniciar sesión
-  </button>
-</form>
-</div>
+
+  <section class="col-span-3 row-start-2 bg-white p-6 rounded shadow">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <input type="text" formControlName="username" placeholder="Usuario" class="p-2 border rounded" />
+      <p-password formControlName="password" [feedback]="false" placeholder="Contraseña"></p-password>
+      <button type="submit" [disabled]="formGroup.invalid" class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50">
+        Iniciar sesión
+      </button>
+    </form>
+  </section> -->
