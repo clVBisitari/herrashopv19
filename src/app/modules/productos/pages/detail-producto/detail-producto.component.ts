@@ -1,8 +1,8 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ProductoService } from '../services/producto.service';
+import { ProductoService } from '../../../../services/producto.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Producto } from '../interfaces/producto.interface';
-import { BrowserModule } from '@angular/platform-browser';
+import { Producto } from '../../../../interfaces/producto.interface';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -11,7 +11,7 @@ import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-detail-producto',
-  imports: [BrowserModule,
+  imports: [CommonModule,
     FormsModule,
     CardModule,
     ButtonModule,
@@ -49,13 +49,15 @@ export class DetailProductoComponent implements OnInit, OnDestroy{
             console.log(data);
           }, 
 
-          error: (err) => {},
+        error: (err) => {
+          console.error('Error al cargar producto:', err);
+        },
 
-          complete: () => {}
-        }
-      );
+        complete: () => {}
+      }
+    );
     } else {
-      console.error('El id del producto es null');
+      console.error('ID de producto no válido');
     }
   }
 }
