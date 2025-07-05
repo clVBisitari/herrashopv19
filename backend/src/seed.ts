@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/prisma';
 
 const prisma = new PrismaClient();
 
@@ -167,12 +167,21 @@ const productosData = [
 
 async function main() {
   console.log('Iniciando el seed...');
-  for (const p of productosData) {
-    await prisma.producto.create({
-      data: p,
-    });
+  try {
+    await prisma.producto.deleteMany({});
+    for (const p of productosData) {
+      console.log(`Creando producto: ${p.nombre}`);
+      
+      await prisma.producto.create({
+        data: p,
+      });
+    }
+    console.log('Seed completado.');
+  } catch (e) {
+    console.error('Error durante el seed:', e);
+  }finally {
+    await prisma.$disconnect();
   }
-  console.log('Seed completado.');
 }
 
 main()

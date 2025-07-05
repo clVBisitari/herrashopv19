@@ -7,7 +7,8 @@
     "start": "ts-node src/app.ts",
     "dev": "ts-node src/app.ts",
     "build": "tsc",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node src/seed.ts",
+    "queries": "ts-node src/queries.ts"
   },
   "keywords": [],
   "author": "",
