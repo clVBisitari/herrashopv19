@@ -24,11 +24,8 @@ import { TagModule } from 'primeng/tag';
 })
 export class DetailProductoComponent implements OnInit, OnDestroy{
   productoService = inject(ProductoService); 
-
   activatedRouter = inject(ActivatedRoute);
-
   id: number | null = null;
-
   producto: Producto | undefined;
 
   ngOnInit() {
@@ -42,20 +39,16 @@ export class DetailProductoComponent implements OnInit, OnDestroy{
 
   getProducto() {
     if (this.id !== null) {
-      this.productoService.getProducto(this.id).subscribe(
-        {
-          next : (data)=>{
-            this.producto = data;
-            console.log(data);
-          }, 
-
+      this.productoService.getProducto(this.id).subscribe({
+        next: (data) => {
+          this.producto = data;
+          console.log(data);
+        }, 
         error: (err) => {
           console.error('Error al cargar producto:', err);
         },
-
         complete: () => {}
-      }
-    );
+      });
     } else {
       console.error('ID de producto no válido');
     }

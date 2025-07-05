@@ -1,32 +1,113 @@
-<div class="container mx-auto p-4">
-  <h2 class="text-2xl font-bold mb-4">Detalle del Producto</h2>
-  
-  <div *ngIf="!producto" class="text-center">
-    <p>Cargando producto...</p>
-  </div>
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Detalle del Producto</h1>
+      <div class="h-1 w-20 bg-blue-500 rounded"></div>
+    </div>
 
-  <div *ngIf="producto" class="max-w-md mx-auto">
-    <p-card header="{{ producto?.nombre }}" styleClass="w-full">
-      <img [src]="producto?.imagen" alt="Imagen del producto" class="w-full h-48 object-cover mb-3 rounded" />
-      <p class="mb-3">{{ producto?.descripcion }}</p>
-
-      <div class="flex justify-between items-center mb-4">
-        <p-tag [value]="'$ ' + producto?.precio" severity="info"></p-tag>
-        <p-badge
-          [value]="producto?.stock > 0 ? 'Disponible' : 'Sin stock'"
-          [severity]="producto?.stock > 0 ? 'success' : 'danger'"
-        ></p-badge>
+    <div *ngIf="!producto" class="flex items-center justify-center h-64">
+      <div class="text-center">
+        <i class="pi pi-spinner pi-spin text-4xl text-blue-500 mb-4"></i>
+        <p class="text-gray-600 text-lg">Cargando producto...</p>
       </div>
+    </div>
 
-      <button
-        pButton
-        type="button"
-        label="Agregar al carrito"
-        icon="pi pi-shopping-cart"
-        class="w-full"
-        [disabled]="producto?.stock === 0"
-      ></button>
-    </p-card>
+    <div *ngIf="producto" class="max-w-4xl mx-auto">
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="md:flex">
+          <div class="md:w-1/2">
+            <div class="h-96 bg-gray-200 flex items-center justify-center">
+              <img 
+                [src]="producto.imagen" 
+                [alt]="producto.nombre"
+                class="max-w-full max-h-full object-contain"
+                onerror="this.src='https://via.placeholder.com/400x300?text=Sin+Imagen'"
+              />
+            </div>
+          </div>
+
+          <div class="md:w-1/2 p-8">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ producto.nombre }}</h2>
+              <p class="text-gray-600 leading-relaxed">{{ producto.descripcion }}</p>
+            </div>
+
+            <div class="mb-6">
+              <div class="flex items-center space-x-4">
+                <span class="text-3xl font-bold text-green-600">
+                  ${{ producto.precio | number:'1.0-0' }}
+                </span>
+                <span 
+                  class="px-3 py-1 text-sm rounded-full"
+                  [class]="producto.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                >
+                  {{ producto.stock > 0 ? 'Disponible' : 'Sin stock' }}
+                </span>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">
+                Stock disponible: {{ producto.stock }} unidades
+              </p>
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">Cantidad:</label>
+                <div class="flex items-center border rounded-md">
+                  <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md">-</button>
+                  <input type="number" value="1" min="1" [max]="producto.stock" 
+                         class="w-16 text-center border-none outline-none">
+                  <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md">+</button>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                [disabled]="producto.stock === 0"
+                [class.opacity-50]="producto.stock === 0"
+                [class.cursor-not-allowed]="producto.stock === 0"
+              >
+                <i class="pi pi-shopping-cart mr-2"></i>
+                Agregar al carrito
+              </button>
+
+              <div class="flex space-x-2">
+                <button type="button" 
+                        class="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                  <i class="pi pi-heart mr-2"></i>
+                  Favoritos
+                </button>
+                <button type="button" 
+                        class="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                  <i class="pi pi-share-alt mr-2"></i>
+                  Compartir
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t bg-gray-50 p-6">
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="text-center">
+              <i class="pi pi-truck text-2xl text-blue-500 mb-2"></i>
+              <p class="text-sm font-medium">Envío gratis</p>
+              <p class="text-xs text-gray-500">En compras mayores a $50.000</p>
+            </div>
+            <div class="text-center">
+              <i class="pi pi-shield text-2xl text-green-500 mb-2"></i>
+              <p class="text-sm font-medium">Garantía</p>
+              <p class="text-xs text-gray-500">12 meses de garantía</p>
+            </div>
+            <div class="text-center">
+              <i class="pi pi-refresh text-2xl text-orange-500 mb-2"></i>
+              <p class="text-sm font-medium">Devoluciones</p>
+              <p class="text-xs text-gray-500">30 días para devolver</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
