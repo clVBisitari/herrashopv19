@@ -44,13 +44,13 @@ export class ProductoService {
     
     constructor() {}
 
-    /* getProducto(id: number ): Observable<Producto> {
+     getProducto(id: number ): Observable<Producto> {
         let headers = new HttpHeaders();
 
-      headers = headers.append(
+      /*headers = headers.append(
       'Authorization',
       'Bearer ' + localStorage.getItem('token')
-    )
+    )*/
 
     return this.http.get<Producto>(`${environment.api_url}/productos/${id}`, 
         { headers })
@@ -58,11 +58,12 @@ export class ProductoService {
         map((res) => {
         return res;
       })
-    ); */
+    ); 
 
-getProducto(id: number): Observable<Producto | undefined> {
+/*getProducto(id: number): Observable<Producto | undefined> {
     const producto = this.productos.find(p => p.id === id);
     return of(producto);
-  }
+  }*/
 
+}
 }
