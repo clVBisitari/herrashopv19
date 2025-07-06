@@ -50,12 +50,39 @@
             </div>
 
             <div class="space-y-4">
-              <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-4 mb-6">
                 <label class="text-sm font-medium text-gray-700">Cantidad:</label>
                 <div class="flex items-center border rounded-md">
-                  <input type="number" value="1" min="1" [max]="producto.stock" 
-                         class="w-16 text-center border-none outline-none">
+                  <button 
+                    type="button"
+                    class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md transition-colors"
+                    [disabled]="cantidad <= 1"
+                    [class.opacity-50]="cantidad <= 1"
+                    [class.cursor-not-allowed]="cantidad <= 1"
+                    (click)="decrementarCantidad()"
+                  >
+                    -
+                  </button>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="cantidad"
+                    min="1" 
+                    [max]="producto?.stock" 
+                    class="w-16 text-center border-none outline-none py-1"
+                    (change)="onCantidadChange($event)"
+                  >
+                  <button 
+                    type="button"
+                    class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md transition-colors"
+                    [disabled]="producto && cantidad >= producto.stock"
+                    [class.opacity-50]="producto && cantidad >= producto.stock"
+                    [class.cursor-not-allowed]="producto && cantidad >= producto.stock"
+                    (click)="incrementarCantidad()"
+                  >
+                    +
+                  </button>
                 </div>
+                <span class="text-sm text-gray-500">Stock: {{ producto?.stock }}</span>
               </div>
 
               <button

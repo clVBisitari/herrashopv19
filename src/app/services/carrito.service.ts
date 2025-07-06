@@ -1,6 +1,5 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common'; //sirve para verificar si estamos en el navegador o en el servidor
 import { CarritoItem } from '../interfaces/carrito.interface';
 import { Producto } from '../interfaces/producto.interface';
 
@@ -9,12 +8,8 @@ import { Producto } from '../interfaces/producto.interface';
 })
 export class CarritoService {
   private carritoItems: CarritoItem[] = [];
-  private carritoSubject = new BehaviorSubject<CarritoItem[]>([]);
-  
-  carrito$ = this.carritoSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-
     if (isPlatformBrowser(this.platformId)) {
       this.cargarCarritoLocalStorage();
     }
@@ -38,45 +33,45 @@ export class CarritoService {
       };
       this.carritoItems.push(nuevoItem);
     }
-
-    this.actualizarCarrito();
+    
+    this.guardarCarritoLocalStorage();
   }
 
   actualizarCantidad(itemId: number, nuevaCantidad: number) {
+    if (nuevaCantidad <= 0) {
+      this.eliminarDelCarrito(itemId);
+      return;
+    }
+    
     const item = this.carritoItems.find(item => item.id === itemId);
     if (item) {
       item.cantidad = nuevaCantidad;
       item.subtotal = item.precio * nuevaCantidad;
-      this.actualizarCarrito();
+      this.guardarCarritoLocalStorage();
     }
   }
 
   eliminarDelCarrito(itemId: number) {
     this.carritoItems = this.carritoItems.filter(item => item.id !== itemId);
-    this.actualizarCarrito();
+    this.guardarCarritoLocalStorage();
   }
 
   vaciarCarrito() {
     this.carritoItems = [];
-    this.actualizarCarrito();
-  }
-
-  obtenerTotal(): number {
-    return this.carritoItems.reduce((total, item) => total + item.subtotal, 0);
-  }
-
-  obtenerCantidadTotal(): number {
-    return this.carritoItems.reduce((total, item) => total + item.cantidad, 0);
+    this.guardarCarritoLocalStorage();
   }
 
   obtenerItems(): CarritoItem[] {
     return this.carritoItems;
   }
-  
-  private actualizarCarrito() {
-    this.carritoSubject.next([...this.carritoItems]);
-    this.guardarCarritoLocalStorage();
-  }
+
+  obtenerTotal(): number {
+    return this.carritoItems.reduce((total, item) => total + item.subtotal, 0);
+  } //lo que hace el reduce es definir el total y el item, y va sumando el subtotal de cada item al total
+
+  obtenerCantidadTotal(): number {
+    return this.carritoItems.reduce((total, item) => total + item.cantidad, 0);
+  } //mismo que arriba pero con cantidad de items
 
   private guardarCarritoLocalStorage() {
     if (isPlatformBrowser(this.platformId)) {
@@ -89,7 +84,6 @@ export class CarritoService {
       const carritoGuardado = localStorage.getItem('carrito');
       if (carritoGuardado) {
         this.carritoItems = JSON.parse(carritoGuardado);
-        this.carritoSubject.next([...this.carritoItems]);
       }
     }
   }

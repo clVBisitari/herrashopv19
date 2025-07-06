@@ -58,6 +58,28 @@ export class DetailProductoComponent implements OnInit, OnDestroy{
     }
   }
 
+
+  incrementarCantidad() {
+    if (this.producto && this.cantidad < this.producto.stock) {
+      this.cantidad++;
+    } //+
+  }
+
+  decrementarCantidad() {
+    if (this.cantidad > 1) {
+      this.cantidad--;
+    } //-
+  }
+
+  onCantidadChange(event: any) {
+    const value = parseInt(event.target.value);
+    if (value >= 1 && this.producto && value <= this.producto.stock) {
+      this.cantidad = value;
+    } else {
+      event.target.value = this.cantidad;
+    } //cambiar numero manualmente
+  }
+
   agregarAlCarrito() {
     if (this.producto && this.cantidad > 0) {
       this.carritoService.agregarAlCarrito(this.producto, this.cantidad);
