@@ -6,8 +6,6 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideClientHydration } from '@angular/platform-browser';
-import { registerLocaleData } from '@angular/common';
-import localeEsAR from '@angular/common/locales/es-AR';
 import { LOCALE_ID } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
