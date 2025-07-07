@@ -10,11 +10,11 @@ import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../../../services/carrito.service';
 import { PaginatorModule } from 'primeng/paginator';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
-  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule],
+  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule, RouterOutlet, RouterLink],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
   providers: [ProductoService, CarritoService, PaginatorModule]
