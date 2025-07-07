@@ -15,13 +15,14 @@ import { Router } from '@angular/router'; // Importing Router for navigation
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+  constructor(private fb: FormBuilder, private http: HttpClient, public router: Router) {
     console.log('FormBuilder:', this.fb);
     this.formGroup = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
+  isLoggedIn: boolean = false; // Variable to track login status
 
   // goToRegister() {
   //   this.http.get('/api/register').subscribe({
