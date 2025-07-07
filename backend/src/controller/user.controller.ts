@@ -1,0 +1,82 @@
+import { Request, Response } from 'express';
+// Update the import path if the file is in a different location, for example:
+import { UserService } from '../service/user.service';
+import { UserRepository } from '../repository/user.repository';
+import { isStringObject } from 'node:util/types';
+
+
+export class UserController {
+    private userService: UserService;
+
+    constructor() {
+        const productoRepository = new UserRepository();
+        this.userService = new UserService(productoRepository);
+    }
+
+    public logIn = async (req: Request, res: Response) => {
+        try {
+            const usuario = String(req.params.usuario);
+
+            if (isStringObject(usuario)) {
+                return res.status(400).json({ message: 'usuario inválido' });
+            }
+
+            const producto = await this.userService.obtenerUsuarioPorId(usuario);
+
+            console.log(producto);
+            
+            if (!producto) {
+                return res.status(404).json({ message: 'usuario no encontrado' });
+            }
+
+            res.status(200).json(producto);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error al obtener el usuario', error });
+        }
+    }
+
+    public getTodosLosUsuarios = async (req: Request, res: Response) => {
+        try {
+            const productos = await this.userService.obtenerTodosLosUsuarios();
+            res.status(200).json(productos);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error al obtener los usuarios', error });
+        }
+    }
+
+    public crearUsuario = async (req: Request, res: Response) => {
+        try {
+            const data = req.body;
+            const nuevoProducto = await this.userService.crearUsuario(data);
+            res.status(201).json(nuevoProducto);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error al crear el usuario', error });
+        }
+    }
+
+    public updateUsuario = async (req: Request, res: Response) => {
+        try {
+            const id = Number(req.params.id);
+            const data = req.body;
+            const productoActualizado = await this.userService.actualizarUsuario(id, data);
+            res.status(200).json(productoActualizado);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error al actualizar el usuario', error });
+        }
+    }
+
+    public eliminarUsuario = async (req: Request, res: Response) => {
+        try {
+            const id = Number(req.params.id);
+            await this.userService.eliminarUsuario(id);
+            res.status(204).send();
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error al eliminar el usuario', error });
+        }
+    }
+}

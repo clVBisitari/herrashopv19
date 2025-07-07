@@ -14,6 +14,10 @@ export class ProductoService {
     
     
     constructor() {}
+      getProductos(): Observable<Producto[]> {
+        const headers = new HttpHeaders();
+        return this.http.get<Producto[]>(`${environment.api_url}/productos`, { headers });
+}
 
      getProducto(id: number ): Observable<Producto> {
         let headers = new HttpHeaders();
@@ -36,5 +40,6 @@ export class ProductoService {
     return of(producto);
   }*/
 
+    
 }
 }

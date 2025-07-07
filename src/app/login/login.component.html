@@ -1,24 +1,35 @@
-<div>
-    <nav class="bg-gray-800 p-4 text-left">
-    <ul class="flex space-x-4 text-white">
-      <li><a routerLink="/" class="hover:underline">Home</a></li>
-      <li><a routerLink="/products" class="hover:underline">Products</a></li>
-      <li><a routerLink="/cart" class="hover:underline">Cart</a></li>
-      <li><a routerLink="/login" class="hover:underline">Login</a></li>
+<div class="flex items-center gap-4 bg-gray-800 p-6 rounded shadow w-full">
+
+  <nav class="flex gap-4 bg-gray-800 p-4 text-white rounded">
+    <ul class="flex gap-4">
+      <li><a routerLink="/" class="hover:text-orange-600 block">Home</a></li>
+      <li><a routerLink="/productos" class="hover:text-orange-600 block">Productos</a></li>
+      <li><a routerLink="/carrito" class="hover:text-orange-600 block">Carrito</a></li>
+      <li><a routerLink="/login" class="hover:text-orange-600 block">Login</a></li>
     </ul>
   </nav>
-  <!-- <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <input type="text" formControlName="username" placeholder="Usuario" />
-  
-  <p-password formControlName="password" placeholder="Contraseña"></p-password>
-  
-  <button type="submit" [disabled]="formGroup.invalid">Iniciar sesión</button>
-</form> -->
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <input type="text" formControlName="username" placeholder="Usuario" class="mb-4 p-2 border rounded" />
-  <p-password formControlName="password" [feedback]="false" placeholder="Contraseña"></p-password>
-  <button type="submit" [disabled]="formGroup.invalid" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
-    Iniciar sesión
+
+  <!-- FORM (solo los campos y el botón de envío) -->
+  @if (!isLoggedIn || router.url === '/register') {
+  <div class=" bg-gray-800 items-right" *ngIf="!isLoggedIn" class="flex-grow">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex items-right gap-4">
+      <input type="text" formControlName="username" placeholder="Usuario" class="p-3 border rounded" />
+
+      <p-password formControlName="password" [feedback]="false" placeholder="Contraseña"
+        inputClass="p-2 border rounded"></p-password>
+
+      <button type="submit" [disabled]="formGroup.invalid"
+        class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 hover:bg-orange-600">
+        Iniciar sesión
+      </button>
+    </form>
+  </div>
+  }
+
+
+  <!-- Botón Registrarse fuera del form, pero inline -->
+  <button type="button" label="Registrarse" routerLink="/register" severity="secondary" icon="pi pi-user-plus"
+    class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 hover:bg-orange-600">
+    Registrarse
   </button>
-</form>
 </div>

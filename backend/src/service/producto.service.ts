@@ -6,4 +6,8 @@ export class ProductoService {
     async obtenerProductoPorId(id: number) {
         return await this.productoRepository.getProductoById(id);
     }
+    async obtenerTodosLosProductos() {
+        return await this.productoRepository.obtenerTodos();
+}
+
 }
