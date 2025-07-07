@@ -1,9 +1,13 @@
 import { Routes } from '@angular/router';
-import { DetailProductoComponent } from './detail-producto/detail-producto.component';
 
 export const productosRoutes: Routes = [
   {
+    path: '',  // Ruta vacía para /productos
+      loadComponent: () => import('./productos/productos.component').then(m => m.ProductosComponent),
+
+  },
+  {
     path: 'detail-producto/:id',
-    component: DetailProductoComponent
+    loadComponent: () => import('./detail-producto/detail-producto.component').then(m => m.DetailProductoComponent)
   }
-]; 
+];
