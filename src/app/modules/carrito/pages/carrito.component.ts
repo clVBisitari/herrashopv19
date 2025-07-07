@@ -43,5 +43,14 @@ export class CarritoComponent implements OnInit {
       this.cargarCarrito(); 
     }
   }
-
+  procederAlCheckout(){
+    if (this.carritoItems.length === 0) {
+      alert('El carrito está vacío. Agrega productos antes de proceder al checkout.');
+      return;
+    }
+    // Aquí podrías redirigir a una página de checkout o realizar alguna acción adicional
+    alert('Procediendo al checkout...');
+    // Por ejemplo, podrías redirigir a una ruta de checkout:
+    // this.router.navigate(['/checkout']);
+  }
 }
