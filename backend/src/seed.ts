@@ -1,167 +1,185 @@
 import { PrismaClient } from '../generated/prisma';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const prisma = new PrismaClient();
 
 const productosData = [
   {
-    nombre: "Laptop Ultrabook X1",
-    descripcion: "Potente laptop con procesador de última generación y diseño ultradelgado, ideal para profesionales.",
-    clasificacion: "Electrónica",
-    precio: 1250.00,
+    nombre: 'AL-1535',
+    descripcion: 'Kit de accesorios AL-1535 para puertas de mueble.',
+    clasificacion: 'Carros',
+    precio: 12000.00,
     stock: 50,
-    imagen: "https://example.com/imagen/laptop_ultrabook_x1.jpg"
+    imagen: '/imagenes/al1535.jpg'
   },
   {
-    nombre: "Smartphone Nova Pro",
-    descripcion: "Cámara triple de alta resolución, pantalla AMOLED y batería de larga duración para el día a día.",
-    clasificacion: "Electrónica",
-    precio: 899.99,
-    stock: 120,
-    imagen: "https://example.com/imagen/smartphone_nova_pro.jpg"
-  },
-  {
-    nombre: "Teclado Mecánico RGB",
-    descripcion: "Teclado gamer con switches táctiles, retroiluminación RGB personalizable y reposamuñecas ergonómico.",
-    clasificacion: "Periféricos",
-    precio: 85.50,
-    stock: 200,
-    imagen: "https://example.com/imagen/teclado_mecanico_rgb.jpg"
-  },
-  {
-    nombre: "Mouse Inalámbrico Ergonómico",
-    descripcion: "Mouse silencioso y cómodo, ideal para largas jornadas de trabajo, con conectividad Bluetooth.",
-    clasificacion: "Periféricos",
-    precio: 25.00,
-    stock: 350,
-    imagen: "https://example.com/imagen/mouse_inalambrico.jpg"
-  },
-  {
-    nombre: "Monitor Curvo 27 pulgadas",
-    descripcion: "Monitor Full HD con panel VA, tasa de refresco de 144Hz, perfecto para gaming y multimedia.",
-    clasificacion: "Monitores",
-    precio: 299.99,
-    stock: 75,
-    imagen: "https://example.com/imagen/monitor_curvo_27.jpg"
-  },
-  {
-    nombre: "Auriculares Bluetooth Noise Cancelling",
-    descripcion: "Sonido de alta fidelidad con cancelación activa de ruido, ideal para viajes y concentración.",
-    clasificacion: "Audio",
-    precio: 150.00,
-    stock: 100,
-    imagen: "https://example.com/imagen/auriculares_bluetooth.jpg"
-  },
-  {
-    nombre: "Smartwatch Deportivo Lite",
-    descripcion: "Monitor de frecuencia cardíaca, contador de pasos, notificaciones y resistencia al agua.",
-    clasificacion: "Wearables",
-    precio: 75.99,
-    stock: 180,
-    imagen: "https://example.com/imagen/smartwatch_deportivo.jpg"
-  },
-  {
-    nombre: "Impresora Multifunción Láser",
-    descripcion: "Imprime, escanea y copia con alta velocidad y eficiencia, ideal para oficina en casa.",
-    clasificacion: "Impresoras",
-    precio: 220.00,
-    stock: 40,
-    imagen: "https://example.com/imagen/impresora_laser.jpg"
-  },
-  {
-    nombre: "Disco Duro Externo 2TB",
-    descripcion: "Almacenamiento portátil de gran capacidad, con conexión USB 3.0 para transferencias rápidas.",
-    clasificacion: "Almacenamiento",
-    precio: 70.00,
-    stock: 250,
-    imagen: "https://example.com/imagen/disco_duro_externo.jpg"
-  },
-  {
-    nombre: "Webcam Full HD con Micrófono",
-    descripcion: "Ideal para videollamadas y streaming, con autoenfoque y corrección automática de luz.",
-    clasificacion: "Periféricos",
-    precio: 45.00,
-    stock: 150,
-    imagen: "https://example.com/imagen/webcam_fullhd.jpg"
-  },
-  {
-    nombre: "Router Wi-Fi 6 de Doble Banda",
-    descripcion: "Maximiza la velocidad y el alcance de tu red doméstica con la última tecnología Wi-Fi 6.",
-    clasificacion: "Redes",
-    precio: 95.00,
-    stock: 60,
-    imagen: "https://example.com/imagen/router_wifi6.jpg"
-  },
-  {
-    nombre: "Altavoz Inteligente con Asistente",
-    descripcion: "Controla tu hogar inteligente, reproduce música y obtén respuestas con comandos de voz.",
-    clasificacion: "Audio",
-    precio: 65.00,
-    stock: 90,
-    imagen: "https://example.com/imagen/altavoz_inteligente.jpg"
-  },
-  {
-    nombre: "Tableta Gráfica Profesional",
-    descripcion: "Ideal para diseñadores y artistas digitales, con alta sensibilidad a la presión y área de trabajo amplia.",
-    clasificacion: "Periféricos",
-    precio: 350.00,
-    stock: 30,
-    imagen: "https://example.com/imagen/tableta_grafica.jpg"
-  },
-  {
-    nombre: "Cámara de Seguridad IP 1080p",
-    descripcion: "Vigilancia HD con visión nocturna, detección de movimiento y acceso remoto desde el móvil.",
-    clasificacion: "Seguridad",
-    precio: 55.00,
-    stock: 80,
-    imagen: "https://example.com/imagen/camara_seguridad_ip.jpg"
-  },
-  {
-    nombre: "Silla Gamer Ergonómica",
-    descripcion: "Diseño ergonómico para largas sesiones de juego, con soporte lumbar y reposabrazos ajustables.",
-    clasificacion: "Mobiliario",
-    precio: 180.00,
+    nombre: 'Bisagra 10 cm inox',
+    descripcion: 'Bisagra carrosera bronzen en acero inoxidable.',
+    clasificacion: 'Bisagras',
+    precio: 5000.00,
     stock: 25,
-    imagen: "https://example.com/imagen/silla_gamer.jpg"
+    imagen: '/imagenes/bisagrainox.jpg'
   },
   {
-    nombre: "Mochila Antirrobo para Laptop",
-    descripcion: "Mochila resistente al agua con compartimentos ocultos y puerto de carga USB.",
-    clasificacion: "Accesorios",
-    precio: 40.00,
-    stock: 110,
-    imagen: "https://example.com/imagen/mochila_antirrobo.jpg"
+    nombre: 'Bisagra 13 cm doble ala',
+    descripcion: 'Bisagra doble ala de 13 cm hierro forjado.',
+    clasificacion: 'Bisagras',
+    precio: 3500.00,
+    stock: 200,
+    imagen: '/imagenes/bisdobleala.jpg'
   },
   {
-    nombre: "Hub USB-C 7 en 1",
-    descripcion: "Expande la conectividad de tu laptop con puertos USB, HDMI, lector de tarjetas y Ethernet.",
-    clasificacion: "Accesorios",
-    precio: 30.00,
-    stock: 170,
-    imagen: "https://example.com/imagen/hub_usbc.jpg"
+    nombre: 'Bisagra 20 cm',
+    descripcion: 'Bisagra doble ala de 20 cm hierro forjado.',
+    clasificacion: 'Bisagras',
+    precio: 4000.00,
+    stock: 150,
+    imagen: '/imagenes/bisdobleala2.jpg'
   },
   {
-    nombre: "Estación de Carga Inalámbrica 3 en 1",
-    descripcion: "Carga tu smartphone, smartwatch y auriculares simultáneamente de forma inalámbrica.",
-    clasificacion: "Accesorios",
-    precio: 49.99,
-    stock: 95,
-    imagen: "https://example.com/imagen/estacion_carga_inalambrica.jpg"
+    nombre: 'Carro de porton',
+    descripcion: 'Carro de porton corredizo arena.',
+    clasificacion: 'Carros',
+    precio: 14500.00,
+    stock: 10,
+    imagen: '/imagenes/carroarena.jpg'
   },
   {
-    nombre: "Drone Plegable con Cámara 4K",
-    descripcion: "Fácil de transportar, con cámara de alta calidad y modos de vuelo inteligente para principiantes.",
-    clasificacion: "Hobbies",
-    precio: 450.00,
+    nombre: 'Cerradura kallay 5002',
+    descripcion: 'Cerradura para puerta corrediza kallay 5002.',
+    clasificacion: 'Cerraduras',
+    precio: 50000.00,
+    stock: 75,
+    imagen: '/imagenes/cerraduracorrediza.jpg'
+  },
+  {
+    nombre: 'Cierra puertas',
+    descripcion: 'Cierra puertas aereo.',
+    clasificacion: 'Aereos',
+    precio: 19000.00,
+    stock: 30,
+    imagen: '/imagenes/cierrapuerta.jpg'
+  },
+  {
+    nombre: 'Falleba',
+    descripcion: 'Falleba de bronce de aplicar o embutir.',
+    clasificacion: 'Manijas',
+    precio: 6000.00,
+    stock: 80,
+    imagen: '/imagenes/falleba.jpg'
+  },
+  {
+    nombre: 'Carros para kit granero',
+    descripcion: 'Par de carros para kit granero.',
+    clasificacion: 'Carros',
+    precio: 20000.00,
+    stock: 60,
+    imagen: '/imagenes/grampas.jpg'
+  },
+  {
+    nombre: 'Kit de puerta granero',
+    descripcion: 'Kit de puerta tipo granero.',
+    clasificacion: 'Carros',
+    precio: 49000.00,
+    stock: 40,
+    imagen: '/imagenes/kitgranero.jpg'
+  },
+  {
+    nombre: 'Kit de portón corredizo',
+    descripcion: 'Kit de portón corredizo Arena.',
+    clasificacion: 'Carros',
+    precio: 190000.00,
+    stock: 20,
+    imagen: '/imagenes/kitportonarena.jpg'
+  },
+  {
+    nombre: 'Manija d/b acero inoxidable',
+    descripcion: 'Manija d/b acero inoxidable Bronzen 1050.',
+    clasificacion: 'Manijas',
+    precio: 11000.00,
     stock: 15,
-    imagen: "https://example.com/imagen/drone_plegable.jpg"
+    imagen: '/imagenes/manija1050.jpg'
   },
   {
-    nombre: "Lector de Libros Electrónicos",
-    descripcion: "Pantalla sin reflejos, luz frontal ajustable y batería de semanas de duración para la lectura.",
-    clasificacion: "Lectura",
-    precio: 110.00,
-    stock: 65,
-    imagen: "https://example.com/imagen/lector_ebooks.jpg"
+    nombre: 'Manijon forjado',
+    descripcion: 'Manijon forjado para porton.',
+    clasificacion: 'Manijas',
+    precio: 12000.00,
+    stock: 5,
+    imagen: '/imagenes/manijaforjada.jpg'
+  },
+  {
+    nombre: 'Manija NYX',
+    descripcion: 'Manija d/b NYX aluminio.',
+    clasificacion: 'Manijas',
+    precio: 13000.00,
+    stock: 2,
+    imagen: '/imagenes/manijanyx.jpg'
+  },
+  {
+    nombre: 'Manija Tropea',
+    descripcion: 'Manija d/b Tropea Currao en acero inoxidable .',
+    clasificacion: 'Manijas',
+    precio: 24000.00,
+    stock: 1,
+    imagen: '/imagenes/manijatropea.jpg'
+  },
+  {
+    nombre: 'Pasador de hierro forjado',
+    descripcion: 'Pasador de hierro forjado 25 cm.',
+    clasificacion: 'Pasadores',
+    precio: 15000.00,
+    stock: 100,
+    imagen: '/imagenes/pasadorforjado.jpg'
+  },
+  {
+    nombre: 'Pasador de chapa',
+    descripcion: 'Pasador de chapa 10 cm.',
+    clasificacion: 'Pasadores',
+    precio: 5000.00,
+    stock: 90,
+    imagen: '/imagenes/pasadorchapa.jpg'
+  },
+  {
+    nombre: 'Pasador de hierro forjado 5cm',
+    descripcion: 'Pasador de hierro forjado 5 cm.',
+    clasificacion: 'Pasadores',
+    precio: 7500.00,
+    stock: 80,
+    imagen: '/imagenes/pasadores.jpg'
+  },
+  {
+    nombre: 'Expulsor metalico',
+    descripcion: 'Expulsor metalico bronzen.',
+    clasificacion: 'Pasadores',
+    precio: 3500.00,
+    stock: 70,
+    imagen: '/imagenes/poe.jpg'
+  },
+  {
+    nombre: 'Tira de puntas',
+    descripcion: 'Tira de puntas de 1 mt.',
+    clasificacion: 'Manijas',
+    precio: 26000.00,
+    stock: 60,
+    imagen: '/imagenes/puntas.jpg'
+  },
+  {
+    nombre: 'Rueda 166',
+    descripcion: 'Rueda 166 roma.',
+    clasificacion: 'Carros',
+    precio: 5500.00,
+    stock: 50,
+    imagen: '/imagenes/rueda166.jpg'
+  },
+  {
+    nombre: 'Kit de herrajes para puerta',
+    descripcion: 'Kit de cerradura, pomo y 3 bisagras para puerta.',
+    clasificacion: 'Manijas',
+    precio: 5000.00,
+    stock: 40,
+    imagen: '/imagenes/set.webp'
   }
 ];
 
@@ -171,24 +189,17 @@ async function main() {
     await prisma.producto.deleteMany({});
     for (const p of productosData) {
       console.log(`Creando producto: ${p.nombre}`);
-      
-      await prisma.producto.create({
-        data: p,
-      });
+      await prisma.producto.create({ data: p });
     }
     console.log('Seed completado.');
   } catch (e) {
     console.error('Error durante el seed:', e);
-  }finally {
+  } finally {
     await prisma.$disconnect();
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
