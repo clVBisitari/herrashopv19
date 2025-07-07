@@ -2,18 +2,24 @@ import { Component } from '@angular/core';
 import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [DividerModule, ButtonModule, InputTextModule],
+  imports: [Toast, Ripple, DividerModule, ButtonModule, InputTextModule ],
+  providers: [MessageService],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  constructor() { }
+   constructor(private messageService: MessageService) {}
+
   goToRegister() {
     // Aquí podrías redirigir a una página de registro o realizar alguna acción adicional
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
     alert('Redirigiendo a la página de registro...');
     // Por ejemplo, podrías redirigir a una ruta de registro:
     // this.router.navigate(['/register']);
