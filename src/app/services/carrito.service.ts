@@ -1,5 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common'; //sirve para verificar si estamos en el navegador o en el servidor
+import { BehaviorSubject } from 'rxjs';
 import { CarritoItem } from '../interfaces/carrito.interface';
 import { Producto } from '../interfaces/producto.interface';
 
@@ -8,11 +9,41 @@ import { Producto } from '../interfaces/producto.interface';
 })
 export class CarritoService {
   private carritoItems: CarritoItem[] = [];
+  
+  // ✅ AGREGAR ESTOS OBSERVABLES:
+  private carritoItemsSubject = new BehaviorSubject<CarritoItem[]>([]);
+  private cantidadTotalSubject = new BehaviorSubject<number>(0);
+  private totalSubject = new BehaviorSubject<number>(0);
+  
+  // Observables públicos
+  carritoItems$ = this.carritoItemsSubject.asObservable();
+  cantidadTotal$ = this.cantidadTotalSubject.asObservable();
+  total$ = this.totalSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
-      this.cargarCarritoLocalStorage();
+      this.cargarCarritoDesdeLocalStorage();
     }
+  }
+
+  private cargarCarritoDesdeLocalStorage() {
+    const carritoGuardado = localStorage.getItem('carrito');
+    if (carritoGuardado) {
+      this.carritoItems = JSON.parse(carritoGuardado);
+      this.notificarCambios(); // ✅ NUEVO
+    }
+  }
+
+  // ✅ MÉTODO NUEVO - Este es la clave:
+  private notificarCambios() {
+    this.carritoItemsSubject.next([...this.carritoItems]);
+    this.cantidadTotalSubject.next(this.obtenerCantidadTotal());
+    this.totalSubject.next(this.obtenerTotal());
+  }
+
+  private guardarEnLocalStorage() {
+    localStorage.setItem('carrito', JSON.stringify(this.carritoItems));
+    this.notificarCambios(); // ✅ AGREGAR ESTA LÍNEA
   }
 
   agregarAlCarrito(producto: Producto, cantidad: number = 1) {
@@ -34,7 +65,7 @@ export class CarritoService {
       this.carritoItems.push(nuevoItem);
     }
     
-    this.guardarCarritoLocalStorage();
+    this.guardarEnLocalStorage(); // ✅ ESTO NOTIFICA LOS CAMBIOS
   }
 
   actualizarCantidad(itemId: number, nuevaCantidad: number) {
@@ -47,18 +78,18 @@ export class CarritoService {
     if (item) {
       item.cantidad = nuevaCantidad;
       item.subtotal = item.precio * nuevaCantidad;
-      this.guardarCarritoLocalStorage();
+      this.guardarEnLocalStorage(); // ✅ AGREGAR
     }
   }
 
   eliminarDelCarrito(itemId: number) {
     this.carritoItems = this.carritoItems.filter(item => item.id !== itemId);
-    this.guardarCarritoLocalStorage();
+    this.guardarEnLocalStorage(); // ✅ AGREGAR
   }
 
   vaciarCarrito() {
     this.carritoItems = [];
-    this.guardarCarritoLocalStorage();
+    this.guardarEnLocalStorage(); // ✅ AGREGAR
   }
 
   obtenerItems(): CarritoItem[] {
@@ -72,19 +103,4 @@ export class CarritoService {
   obtenerCantidadTotal(): number {
     return this.carritoItems.reduce((total, item) => total + item.cantidad, 0);
   } //mismo que arriba pero con cantidad de items
-
-  private guardarCarritoLocalStorage() {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('carrito', JSON.stringify(this.carritoItems));
-    }
-  }
-
-  private cargarCarritoLocalStorage() {
-    if (isPlatformBrowser(this.platformId)) {
-      const carritoGuardado = localStorage.getItem('carrito');
-      if (carritoGuardado) {
-        this.carritoItems = JSON.parse(carritoGuardado);
-      }
-    }
-  }
 }

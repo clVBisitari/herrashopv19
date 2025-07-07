@@ -17,7 +17,7 @@ import { Router, RouterOutlet, RouterLink } from '@angular/router';
   imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule, RouterOutlet, RouterLink],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
-  providers: [ProductoService, CarritoService, PaginatorModule]
+  providers: [ProductoService, PaginatorModule]
 })
 export class ProductosComponent {
  constructor(public router: Router){}
@@ -88,4 +88,6 @@ export class ProductosComponent {
     console.log('Page changed:', $event);
     // Aquí puedes manejar el cambio de página si es necesario
   }
+
+  
 }
