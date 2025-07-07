@@ -19,9 +19,15 @@ model Producto {
 }
 
 model Usuario {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  email          String   @unique
+  password       String
+  telefono       Int
+  direccion      String
+  ciudad         String
+  pais           String
+  codigo_postal  String
+  fecha_registro DateTime @default(now())
+  rol            String   @default("user") // 'admin' | 'user'
 }

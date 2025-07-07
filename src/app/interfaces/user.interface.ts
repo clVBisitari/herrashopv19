@@ -1,5 +1,5 @@
 export interface User {
-  id: number;
+    id: number;
     nombre: string;
     apellido: string;
     email: string;
@@ -10,8 +10,8 @@ export interface User {
     pais: string;
     codigo_postal: string;
     fecha_registro: Date;
-    /*rol: 'admin' | 'user';
-    estado: 'activo' | 'inactivo';
+    rol: 'admin' | 'user';
+    /*estado: 'activo' | 'inactivo';
     token?: string; // Optional for authentication purposes
     imagen?: string; // Optional for user profile picture
     fecha_nacimiento?: Date; // Optional for user profile
