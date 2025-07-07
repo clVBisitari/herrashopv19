@@ -16,7 +16,6 @@ export const routes: Routes = [
     path: 'register', 
     loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent)
     // loadChildren: () => import('./register/register.routes').then(m => m.registerRoutes),
-    // component: RegisterComponent 
   },
   {
     path: 'productos',
