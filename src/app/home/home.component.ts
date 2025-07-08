@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CarouselModule } from 'primeng/carousel';
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -44,8 +45,8 @@ import { CarouselModule } from 'primeng/carousel';
 })
 export class HomeComponent {
   imagenes = [
-    { imagen: 'src/assets/imagenes/banners/banner1.png', titulo: 'Ofertas de verano' },
-    { imagen: 'src/assets/imagenes/banners/banner2.png', titulo: 'Nuevos Ingresos' },
-    { imagen: 'src/assets/imagenes/banners/banner3.png', titulo: 'Herramientas con descuento' }
+    { imagen: '/assets/imagenes/banner1.png', titulo: 'Ofertas de verano' },
+    { imagen: '/assets/imagenes/banner2.png', titulo: 'Nuevos Ingresos' },
+    { imagen: '/assets/imagenes/banner3.png', titulo: 'Herramientas con descuento' }
   ];
 }
