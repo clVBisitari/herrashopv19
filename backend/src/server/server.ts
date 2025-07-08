@@ -18,15 +18,17 @@ export class Server {
     this.routes = routes;
   }
 
-  async start() {
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cors());
+    async start() {
 
-    this.app.use('/api/productos', productoRouter); 
+        this.app.use(express.json())
+        this.app.use(express.urlencoded({extended : true}))
 
-    this.app.listen(this.port, () => {
-      console.log("Servidor corriendo en el puerto " + this.port + " desde " + process.cwd());
-    });
-  }
+        this.app.use(cors())
+        
+        this.app.use('/api',this.routes);
+
+        this.app.listen(this.port, ()=>{
+            console.log("Servidor corriendo en el puerto " + this.port + " desde el directorio " + process.cwd());
+        })
+     }
 }

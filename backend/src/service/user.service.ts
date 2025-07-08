@@ -1,4 +1,5 @@
 import { UserRepository } from "../repository/user.repository";
+import bcrypt from 'bcryptjs';
 
 export class UserService {
     constructor(private productoRepository: UserRepository) {}
@@ -10,6 +11,10 @@ export class UserService {
         return await this.productoRepository.getAllUsers();
     }
     async crearUsuario(data: any) {
+        
+        if(data.password) {
+            data.password = await bcrypt.hash(data.password, 10);
+        }
         return await this.productoRepository.createUser(data);
     }
     async actualizarUsuario(id: number, data: any) {

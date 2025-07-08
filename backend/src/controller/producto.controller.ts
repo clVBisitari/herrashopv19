@@ -13,14 +13,14 @@ export class ProductoController {
     }
 
     public getAllProductos = async (req: Request, res: Response) => {
-    try {
-        const productos = await this.productoService.obtenerTodosLosProductos();
-        res.status(200).json(productos);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Error al obtener los productos', error });
+        try {
+            const productos = await this.productoService.obtenerTodosLosProductos();
+            res.status(200).json(productos);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error al obtener los productos', error });
+        }
     }
-}
 
     public getProducto = async (req: Request, res: Response) => {
         try {
@@ -33,7 +33,7 @@ export class ProductoController {
             const producto = await this.productoService.obtenerProductoPorId(id);
 
             console.log(producto);
-            
+
             if (!producto) {
                 return res.status(404).json({ message: 'Producto no encontrado' });
             }

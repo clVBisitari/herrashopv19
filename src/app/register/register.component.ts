@@ -6,9 +6,12 @@ import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 import { Ripple } from 'primeng/ripple';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { User } from '../../app/interfaces/user.interface';
+import { Observable } from 'rxjs';
+import { environment } from '../environments/environments';
 
 
 @Component({
@@ -25,25 +28,40 @@ export class RegisterComponent {
     this.registerForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      telefono: ['', Validators.required],
+      direccion: ['', Validators.required],
+      ciudad: ['', Validators.required],
+      pais: ['', Validators.required],
+      codigo_postal: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       password2: ['', Validators.required]
     });
   }
 
 
-  goToRegister() {
+  goToRegister(): Observable<User> | any {
     if (this.registerForm.invalid) return;
 
-    const { nombre, email, password, password2 } = this.registerForm.value;
+    const { nombre, email, telefono, direccion, ciudad, pais, codigo_postal, password, password2 } = this.registerForm.value;
     if (password !== password2) {
       alert('Las contraseñas no coinciden');
       return;
     }
-    this.http.post('http://localhost:3000/api/crearusuario', {
+    console.log('Formulario enviado:', nombre, email, telefono, direccion, ciudad, pais, codigo_postal, password, password2);
+    const nuevoUser = {
       nombre,
       email,
-      password
-    }).subscribe({
+      telefono,
+      direccion,
+      ciudad,
+      pais,
+      codigo_postal,
+      password,
+      rol: 'user'
+    };
+    const headers = new HttpHeaders();
+    console.log(environment.api_url);
+    this.http.post<User>(`${environment.api_url}/crearusuario`, nuevoUser).subscribe({
       next: (res) => {
         alert('Usuario registrado exitosamente');
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Usuario registrado exitosamente!' });
@@ -54,7 +72,7 @@ export class RegisterComponent {
         alert('Error al registrar usuario');
       }
     });
-     this.router.navigate(['/home']);
+    this.router.navigate(['/home']);
   }
 
   login() {
