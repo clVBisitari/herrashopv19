@@ -12,10 +12,12 @@ import { CarritoService } from '../../../../services/carrito.service';
 import { PaginatorModule } from 'primeng/paginator';
 import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { SliderModule } from 'primeng/slider';
 
 @Component({
   selector: 'app-productos',
-  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule,  DialogModule, RouterOutlet, RouterLink],
+  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule, RouterOutlet, RouterLink,  DialogModule, InputSwitchModule, SliderModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
   providers: [ProductoService, PaginatorModule]
@@ -32,6 +34,16 @@ export class ProductosComponent {
   first: any;
   rows: any;
   modalVisible: boolean = false;
+  filtroNombre: string = '';
+  filtroDescripcion: string = '';
+  filtroPrecioMin: number | null = null;
+  filtroPrecioMax: number | null = null;
+  productosOriginal: any[] = []; 
+  filtroStock: boolean = false;
+  filtroRangoPrecio: [number, number] = [0, 10000]; // 
+  precioMinimoAbsoluto: number = 0;
+  precioMaximoAbsoluto: number = 10000;
+
 
   nuevoProducto = {
     nombre: '',
@@ -41,6 +53,7 @@ export class ProductosComponent {
     stock: 0,
     imagen: ''
   };
+
 
   onSortChange($event: SelectChangeEvent) {
 
@@ -67,15 +80,30 @@ export class ProductosComponent {
   sortKey: any;
 
   
-  ngOnInit() {
-    this.productoService.getProductos().subscribe((data) => {
-      const d = data.slice(0, 20);
-      this.products.set([...d])
+  ngOnInit() 
+  {
+    this.productoService.getProductos().subscribe((data) => 
+    {
+      this.products.set([...data]);
+      this.productosOriginal = data;
+      
+      const precios = data.map(p => p.precio);
+      this.precioMinimoAbsoluto = Math.min(...precios);
+      this.precioMaximoAbsoluto = Math.max(...precios);
+      this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
+      
+      const filtrosGuardados = localStorage.getItem('filtrosProductos');
+      if (filtrosGuardados) 
+      {
+        const filtros = JSON.parse(filtrosGuardados);
+        this.filtroNombre = filtros.nombre || '';
+        this.filtroDescripcion = filtros.descripcion || '';
+        this.filtroStock = filtros.stock || false;
+        this.filtroRangoPrecio = filtros.rangoPrecio || [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
+      }
+    
+      this.filtrarProductos(); // ✅ aplica los filtros
     });
-    this.sortOptions = [
-      { label: 'Menor precio a mayor', value: '!precio' },
-      { label: 'Mayor precio a menor', value: 'precio' },
-    ];
   }
 
   getSeverity(producto: Producto) {
@@ -115,7 +143,7 @@ export class ProductosComponent {
           imagen: ''
         };
         alert('✅ Producto creado correctamente');
-        // this.recargarProductos(); // Descomentá si tenés una función para recargar productos
+        this.recargarProductos();
       },
       error: (err) => {
         console.error('Error al guardar producto:', err);
@@ -129,5 +157,63 @@ export class ProductosComponent {
     // Aquí puedes manejar el cambio de página si es necesario
   }
 
-  
+
+ recargarProductos() 
+ {
+    this.productoService.getProductos().subscribe((data) =>
+    {
+      this.products.set([...data]);
+      this.productosOriginal = data;
+      this.filtrarProductos(); // ✅ reaplica los filtros
+    });
+  }
+
+
+
+  filtrarProductos()
+  {
+  let filtrados = [...this.productosOriginal];
+
+  if (this.filtroNombre.trim()) {
+    filtrados = filtrados.filter(p =>
+      p.nombre.toLowerCase().includes(this.filtroNombre.trim().toLowerCase())
+    );
+  }
+
+  if (this.filtroDescripcion.trim()) {
+    filtrados = filtrados.filter(p =>
+      p.descripcion.toLowerCase().includes(this.filtroDescripcion.trim().toLowerCase())
+    );
+  }
+
+  // Filtro de stock
+  if (this.filtroStock) {
+    filtrados = filtrados.filter(p => p.stock > 0);
+  }
+
+  // Filtro por slider de precio
+  const [minPrecio, maxPrecio] = this.filtroRangoPrecio;
+  filtrados = filtrados.filter(p => p.precio >= minPrecio && p.precio <= maxPrecio);
+
+  this.products.set(filtrados);
+  localStorage.setItem('filtrosProductos', JSON.stringify({
+  nombre: this.filtroNombre,
+  descripcion: this.filtroDescripcion,
+  stock: this.filtroStock,
+  rangoPrecio: this.filtroRangoPrecio
+  }));
+  }
+
+  limpiarFiltros() 
+  {
+  this.filtroNombre = '';
+  this.filtroDescripcion = '';
+  this.filtroStock = false;
+  this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
+
+  localStorage.removeItem('filtrosProductos');
+  this.filtrarProductos();
+  }
+
+
 }
