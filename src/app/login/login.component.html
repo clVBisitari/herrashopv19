@@ -1,32 +1,29 @@
 <div class="bg-slate-800 border-b border-slate-600 shadow-lg">
   <div class="container mx-auto px-4">
     <div class="py-3">
-      
-     
+
+
       <div class="flex items-center justify-between w-full">
-  
+
         <nav class="flex-1">
           <ul class="flex justify-between w-full max-w-md">
             <li>
-              <a routerLink="/" 
-                 routerLinkActive="bg-blue-600 text-white"
-                 class="text-gray-300 hover:text-white hover:bg-slate-700 transition-all duration-200 px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium">
+              <a routerLink="/" routerLinkActive="bg-blue-600 text-white"
+                class="text-gray-300 hover:text-white hover:bg-slate-700 transition-all duration-200 px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium">
                 <i class="pi pi-home text-sm"></i>
                 <span>Home</span>
               </a>
             </li>
             <li>
-              <a routerLink="/productos" 
-                 routerLinkActive="bg-blue-600 text-white"
-                 class="text-gray-300 hover:text-white hover:bg-slate-700 transition-all duration-200 px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium">
+              <a routerLink="/productos" routerLinkActive="bg-blue-600 text-white"
+                class="text-gray-300 hover:text-white hover:bg-slate-700 transition-all duration-200 px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium">
                 <i class="pi pi-box text-sm"></i>
                 <span>Productos</span>
               </a>
             </li>
             <li>
-              <a routerLink="/carrito" 
-                 routerLinkActive="bg-blue-600 text-white"
-                 class="text-gray-300 hover:text-white hover:bg-slate-700 transition-all duration-200 px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium relative">
+              <a routerLink="/carrito" routerLinkActive="bg-blue-600 text-white"
+                class="text-gray-300 hover:text-white hover:bg-slate-700 transition-all duration-200 px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium relative">
                 <i class="pi pi-shopping-cart text-sm"></i>
                 <span>Carrito</span>
 
@@ -43,62 +40,55 @@
           </ul>
         </nav>
 
-  
+
         <div class="flex items-center gap-3 ml-8">
-          
-     
-          @if (!isLoggedIn && router.url !== '/register') {
-            <div class="hidden lg:flex items-center gap-2 bg-slate-700 p-2 rounded-lg border border-slate-600">
-              <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex items-center gap-2">
-            
-                <div class="relative">
-                  <i class="pi pi-user absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                  <input 
-                    type="text" 
-                    formControlName="username" 
-                    placeholder="Usuario" 
-                    class="pl-8 pr-3 py-2 w-32 bg-slate-600 border border-slate-500 rounded-md text-white text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-slate-500 transition-all"
-                  />
-                </div>
+          @if (!isLoggedIn)
+          {
+          <div class="hidden lg:flex items-center gap-2 bg-slate-700 p-2 rounded-lg border border-slate-600">
+            <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex items-center gap-2">
 
-         
-                <div class="relative">
-                  <i class="pi pi-lock absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-20"></i>
-                  <input 
-                    type="password" 
-                    formControlName="password" 
-                    placeholder="Contraseña"
-                    class="pl-8 pr-3 py-2 w-32 bg-slate-600 border border-slate-500 rounded-md text-white text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-slate-500 transition-all"
-                  />
-                </div>
+              <div class="relative">
+                <i class="pi pi-user absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+                <input type="text" formControlName="username" placeholder="Usuario"
+                  class="pl-8 pr-3 py-2 w-32 bg-slate-600 border border-slate-500 rounded-md text-white text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-slate-500 transition-all" />
+              </div>
 
-            
-                <button 
-                  type="submit" 
-                  [disabled]="formGroup.invalid"
-                  class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium"
-                >
-                  <i class="pi pi-sign-in"></i>
-                </button>
-              </form>
-            </div>
-          }
 
-     
+              <div class="relative">
+                <i
+                  class="pi pi-lock absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-20"></i>
+                <input type="password" formControlName="password" placeholder="Contraseña"
+                  class="pl-8 pr-3 py-2 w-32 bg-slate-600 border border-slate-500 rounded-md text-white text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-slate-500 transition-all" />
+              </div>
+
+
+              <button type="submit" [disabled]="formGroup.invalid"
+                class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium">
+                <i class="pi pi-sign-in"></i>
+              </button>
+            </form>
+          </div>
           <div class="hidden lg:block w-px h-8 bg-slate-600"></div>
-
-       
-          <button 
-            type="button" 
-            routerLink="/register"
-            class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-          >
+          <button type="button" routerLink="/register"
+            class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
             <i class="pi pi-user-plus text-sm"></i>
             <span>Registrarse</span>
           </button>
+        }
+          @else {
+          <p class="text-gray-300 font-medium">
+            <i class="pi pi-user text-sm"></i>
+            <span>Hola, {{ user?.nombre || 'Usuario' }}!</span>
+          </p>
+
+          <button type="button" (click)="logout()" routerLink="/"
+            class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            <i class="pi pi-sign-out text-sm"></i>
+            <span>LogOut</span>
+          </button>
+          }
         </div>
       </div>
     </div>
   </div>
 </div>
-
