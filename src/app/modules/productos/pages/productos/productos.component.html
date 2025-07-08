@@ -80,12 +80,18 @@
                                 
                                 <div class="flex gap-2">
                                     <p-button 
-                                        icon="pi pi-heart" 
-                                        [outlined]="true" 
-                                        [rounded]="true"
-                                        size="small"
-                                        class="p-button-secondary"
-                                    />
+  [icon]="esFavorito(item.id) ? 'pi pi-heart-fill' : 'pi pi-heart'" 
+  [severity]="esFavorito(item.id) ? 'danger' : 'secondary'" 
+  [rounded]="true"
+  size="small"
+  (onClick)="toggleFavorito(item.id)"
+  tooltipPosition="top"
+>
+                                        <ng-template pTemplate="tooltip">
+                                            {{ esFavorito(item.id) ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
+                                        </ng-template>
+</p-button>
+
                                     
                                     <p-button 
                                         icon="pi pi-shopping-cart"
