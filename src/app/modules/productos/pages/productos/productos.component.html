@@ -21,8 +21,7 @@
                                     <img 
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                                         [src]="item.imagen"
-                                        [alt]="item.nombre" 
-                                        onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'"
+                                        [alt]="item.nombre"
                                     />
                                 </div>
                                 
@@ -75,7 +74,7 @@
                             <div class="flex flex-col items-end gap-4 flex-shrink-0">
                                 <div class="text-right">
                                     <span class="text-2xl font-bold text-green-400">
-                                        {{ item.precio | currency:'ARS':'symbol':'1.2-2' }}
+                                        {{ item.precio | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
                                     </span>
                                 </div>
                                 
