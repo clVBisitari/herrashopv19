@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CarouselModule } from 'primeng/carousel';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CarouselModule],
   template: `
-    <div class="container mx-auto p-8">
-      <h2 class="text-3xl font-bold mb-6">Bienvenido a Herrashop</h2>
+    <!-- <div class="container mx-auto p-8">
+      
+      <h2 class="text-3xl font-bold my-8">Bienvenido a Herrashop</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-blue-100 p-6 rounded-lg">
           <h3 class="text-xl font-semibold mb-4">Productos</h3>
@@ -27,7 +30,29 @@ import { RouterModule } from '@angular/router';
           </a>
         </div>
       </div>
+    </div> -->
+
+    <!-- Carrusel -->
+    <p-carousel [value]="imagenes" [numVisible]="1" [circular]="true" [autoplayInterval]="3000">
+      <ng-template pTemplate="item" let-img>
+        <div class="w-full max-h-[500px] overflow-hidden flex justify-center items-center">
+      <img 
+        [src]="img.imagen" 
+        [alt]="img.titulo" 
+        class="max-w-full max-h-[500px] object-contain rounded-lg shadow" 
+      />
     </div>
+        <div class="text-center mt-2 text-lg font-semibold text-white bg-black bg-opacity-50 rounded py-1">
+          {{ img.titulo }}
+        </div>
+      </ng-template>
+    </p-carousel>
   `
 })
-export class HomeComponent { }
+export class HomeComponent {
+  imagenes = [
+    { imagen: '/imagenes/assets/banner1.png', titulo: 'Ofertas de verano' },
+    { imagen: '/imagenes/assets/banner2.png', titulo: 'Nuevos Ingresos' },
+    { imagen: '/imagenes/assets/banner3.png', titulo: 'Herramientas con descuento' }
+  ];
+}
