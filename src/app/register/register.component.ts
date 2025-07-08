@@ -47,68 +47,99 @@ export class RegisterComponent {
   }
 
 
-  goToRegister(): Observable<User> | any 
-  {
+  goToRegister(): Observable<User> | any {
     if (this.registerForm.invalid) return;
 
     const { nombre, email, telefono, direccion, ciudad, pais, codigo_postal, password, password2 } = this.registerForm.value;
 
-    if (password !== password2)   
-    {
+    if (password !== password2) {
       alert('Las contraseñas no coinciden');
       return;
     }
-
-    // Consultamos si el email ya está registrado
-    this.http.get<{ exists: boolean }>(`${environment.api_url}/usuarios/check-email?email=${email}`).subscribe({
-      next: (res) => 
-        {
-        if (res.exists) 
-        {
+    this.userService.getUserPorEmail(email).subscribe({
+      next: (user) => {
+        if (user) {
           alert('El email ya está registrado. Por favor, usá otro.');
           return;
         }
-
-        // Si no existe, seguimos con el registro
-        const nuevoUser = 
-        {
-          nombre,
-          email,
-          telefono,
-          direccion,
-          ciudad,
-          pais,
-          codigo_postal,
-          password,
-          rol: 'user'
-        };
-
-        this.http.post<User>(`${environment.api_url}/crearusuario`, nuevoUser).subscribe({
-          next: (res) => 
-          {
-            alert('Usuario registrado exitosamente');
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Usuario registrado exitosamente!' });
-            this.registerForm.reset();
-            this.router.navigate(['/home']);
-          },
-          error: (err) => 
-          {
-            console.error(err);
-            alert('Error al registrar usuario');
-          }
-        });
-      },
-      error: (err) => 
-      {
-        console.error('Error al verificar email:', err);
-        alert('Error al verificar el email');
       }
-  });
-}
+    });
+
+    this.userService.crearUsuario({
+      nombre,
+      email,
+      telefono,
+      direccion,
+      ciudad,
+      pais,
+      codigo_postal,
+      password,
+      rol: 'user'
+    }).subscribe({
+      next: (res) => {
+        alert('Usuario registrado exitosamente');
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Usuario registrado exitosamente!' });
+        this.registerForm.reset();
+        this.userService.setLoginState(true);
+        this.userService.setUser(res);
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error al registrar usuario');
+      }
+    });
+
+    // Consultamos si el email ya está registrado
+    //   this.http.get<{ exists: boolean }>(`${environment.api_url}/usuarios/check-email?email=${email}`).subscribe({
+    //     next: (res) => 
+    //       {
+    //       if (res.exists) 
+    //       {
+    //         alert('El email ya está registrado. Por favor, usá otro.');
+    //         return;
+    //       }
+
+    //       // Si no existe, seguimos con el registro
+    //       const nuevoUser = 
+    //       {
+    //         nombre,
+    //         email,
+    //         telefono,
+    //         direccion,
+    //         ciudad,
+    //         pais,
+    //         codigo_postal,
+    //         password,
+    //         rol: 'user'
+    //       };
+
+    //       this.http.post<User>(`${environment.api_url}/crearusuario`, nuevoUser).subscribe({
+    //         next: (res) => 
+    //         {
+    //           alert('Usuario registrado exitosamente');
+    //           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Usuario registrado exitosamente!' });
+    //           this.registerForm.reset();
+    //           this.router.navigate(['/home']);
+    //         },
+    //         error: (err) => 
+    //         {
+    //           console.error(err);
+    //           alert('Error al registrar usuario');
+    //         }
+    //       });
+    //     },
+    //     error: (err) => 
+    //     {
+    //       console.error('Error al verificar email:', err);
+    //       alert('Error al verificar el email');
+    //     }
+    // });
+  }
 
 
   login() {
-    const {email, pass} = this.loginForm.value;
+    const { email, pass } = this.loginForm.value;
     console.log('Usuario:', email);
     console.log('password:', pass);
 

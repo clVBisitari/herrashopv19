@@ -16,6 +16,7 @@ export class UserService {
                     return null; // Contraseña incorrecta
                 }
             }
+            console.log("paso por aca sin password");
             return user;
         } catch (error) {
             console.error("Error al obtener el usuario por email:", error);

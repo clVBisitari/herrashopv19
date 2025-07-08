@@ -7,6 +7,7 @@ const userController = new UserController();
 
 userRouter.post('/login', userController.logIn.bind(userController));
 userRouter.get('/usuarios', userController.getTodosLosUsuarios.bind(userController));
+userRouter.get('/:email', userController.getUsuarioPorEmail);
 userRouter.post('/crearusuario', userController.crearUsuario);
 userRouter.put('/actualizar/:id', userController.updateUsuario.bind(userController));
 userRouter.delete('/eliminar/:id', userController.eliminarUsuario.bind(userController));

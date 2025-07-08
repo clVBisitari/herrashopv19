@@ -41,9 +41,8 @@
 
 
         <div class="flex items-center gap-3 ml-8">
-
-
-          @if (!isLoggedIn) {
+          @if (!isLoggedIn)
+          {
           <div class="hidden lg:flex items-center gap-2 bg-slate-700 p-2 rounded-lg border border-slate-600">
             <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex items-center gap-2">
 
@@ -68,28 +67,25 @@
               </button>
             </form>
           </div>
-
-
           <div class="hidden lg:block w-px h-8 bg-slate-600"></div>
-
-
           <button type="button" routerLink="/register"
             class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
             <i class="pi pi-user-plus text-sm"></i>
             <span>Registrarse</span>
           </button>
         }
-        @else {
+          @else {
           <p class="text-gray-300 font-medium">
             <i class="pi pi-user text-sm"></i>
-            <span>{{ userService.getUser()?.nombre || 'Usuario' }}</span>
-            
+            <span>Hola, {{ user?.nombre || 'Usuario' }}!</span>
+          </p>
+
           <button type="button" (click)="logout()" routerLink="/"
             class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
             <i class="pi pi-sign-out text-sm"></i>
             <span>LogOut</span>
           </button>
-        }
+          }
         </div>
       </div>
     </div>

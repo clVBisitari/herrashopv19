@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router'; // Importing Router for navigation
 import { UserService } from '../services/user.service';
+import { User } from '../interfaces/user.interface';
 
 
 @Component({
@@ -21,13 +22,14 @@ import { UserService } from '../services/user.service';
 export class LoginComponent {
   
   constructor(private fb: FormBuilder, private http: HttpClient, private userService:UserService, public router: Router) {
-    console.log('FormBuilder:', this.fb);
+    
     this.formGroup = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
   isLoggedIn: boolean = false; // Variable to track login status
+  user: User | null = null;
 
   ngOnInit() {
     this.isLoggedIn = this.userService.isLoggedIn();
@@ -44,8 +46,10 @@ export class LoginComponent {
     this.userService.login(this.formGroup.value.username, this.formGroup.value.password).subscribe({
       next: (response) => {
         console.log('Login exitoso:', response);
+        this.user = response;
         this.isLoggedIn = true;
         this.userService.setLoginState(true);
+        this.userService.setUser(response); 
         this.router.navigate(['/']);
       },
       error: (error) => {
