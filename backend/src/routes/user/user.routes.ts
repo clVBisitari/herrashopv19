@@ -5,7 +5,7 @@ export const userRouter = Router();
 
 const userController = new UserController();
 
-userRouter.get('/login', userController.logIn.bind(userController));
+userRouter.post('/login', userController.logIn.bind(userController));
 userRouter.get('/usuarios', userController.getTodosLosUsuarios.bind(userController));
 userRouter.post('/crearusuario', userController.crearUsuario);
 userRouter.put('/actualizar/:id', userController.updateUsuario.bind(userController));

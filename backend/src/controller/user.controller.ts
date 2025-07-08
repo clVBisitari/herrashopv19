@@ -3,9 +3,11 @@ import { Request, Response } from 'express';
 import { UserService } from '../service/user.service';
 import { UserRepository } from '../repository/user.repository';
 import { isStringObject } from 'node:util/types';
+import { UserModel } from '../models/user.model';
 
 export class UserController {
     private userService: UserService;
+    private userSafe: UserModel;
 
     constructor() {
         const productoRepository = new UserRepository();
@@ -14,21 +16,33 @@ export class UserController {
 
     public logIn = async (req: Request, res: Response) => {
         try {
-            const usuario = String(req.params.usuario);
-
-            if (isStringObject(usuario)) {
+            const email = String(req.body.email);
+            console.log('Email recibido:', email);
+            if (isStringObject(email)) {
                 return res.status(400).json({ message: 'usuario inválido' });
             }
 
-            const producto = await this.userService.obtenerUsuarioPorId(usuario);
+            const user = await this.userService.obtenerUsuarioPorEmail(email);
+            this.userSafe = {
+                id: user.id,
+                nombre: user.nombre,
+                email: user.email,
+                telefono: user.telefono.toString(), // Convert BigInt to string for JSON compatibility
+                direccion: user.direccion,
+                ciudad: user.ciudad,
+                pais: user.pais,
+                codigo_postal: user.codigo_postal,
+                fecha_registro: user.fecha_registro,
+                rol: user.rol
+            };
+            console.log(this.userSafe);
 
-            console.log(producto);
-
-            if (!producto) {
+            if (!user) {
                 return res.status(404).json({ message: 'usuario no encontrado' });
             }
+            
+            res.status(200).json(this.userSafe);
 
-            res.status(200).json(producto);
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: 'Error al obtener el usuario', error });
