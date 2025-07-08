@@ -186,11 +186,38 @@ const productosData = [
 async function main() {
   console.log('Iniciando el seed...');
   try {
+
+    const usuario = await prisma.usuario.create({
+  data: {
+    nombre: 'Juan Pérez',
+    email: 'juan@example.com',
+    password: 'hashedpassword123',
+    telefono: BigInt('1234567890'),
+    direccion: 'Calle Falsa 123',
+    ciudad: 'Buenos Aires',
+    pais: 'Argentina',
+    codigo_postal: '1234',
+  },
+});
+
     await prisma.producto.deleteMany({});
     for (const p of productosData) {
       console.log(`Creando producto: ${p.nombre}`);
       await prisma.producto.create({ data: p });
     }
+
+
+const productoEjemplo = await prisma.producto.findFirst({});
+
+if (productoEjemplo) {
+  await prisma.productoFavorito.create({
+    data: {
+      usuarioId: usuario.id,
+      productoId: productoEjemplo.id,
+    },
+  });
+}
+
     console.log('Seed completado.');
   } catch (e) {
     console.error('Error durante el seed:', e);
@@ -198,6 +225,7 @@ async function main() {
     await prisma.$disconnect();
   }
 }
+
 
 main().catch((e) => {
   console.error(e);
