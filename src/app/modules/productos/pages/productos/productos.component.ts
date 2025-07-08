@@ -12,10 +12,12 @@ import { CarritoService } from '../../../../services/carrito.service';
 import { PaginatorModule } from 'primeng/paginator';
 import { Router } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { SliderModule } from 'primeng/slider';
 
 @Component({
   selector: 'app-productos',
-  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule,  DialogModule],
+  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule,  DialogModule, InputSwitchModule, SliderModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
   providers: [ProductoService, CarritoService, PaginatorModule]
@@ -32,6 +34,16 @@ export class ProductosComponent {
   first: any;
   rows: any;
   modalVisible: boolean = false;
+  filtroNombre: string = '';
+  filtroDescripcion: string = '';
+  filtroPrecioMin: number | null = null;
+  filtroPrecioMax: number | null = null;
+  productosOriginal: any[] = []; 
+  filtroStock: boolean = false;
+  filtroRangoPrecio: [number, number] = [0, 10000]; // 
+  precioMinimoAbsoluto: number = 0;
+  precioMaximoAbsoluto: number = 10000;
+
 
   nuevoProducto = {
     nombre: '',
@@ -41,6 +53,7 @@ export class ProductosComponent {
     stock: 0,
     imagen: ''
   };
+
 
   onSortChange($event: SelectChangeEvent) {
 
@@ -67,15 +80,17 @@ export class ProductosComponent {
   sortKey: any;
 
   
-  ngOnInit() {
+  ngOnInit() 
+  {
     this.productoService.getProductos().subscribe((data) => {
-      const d = data.slice(0, 20);
-      this.products.set([...d])
+     this.products.set([...data]);
+     this.productosOriginal = data;
+    
+     const precios = data.map(p => p.precio);
+     this.precioMinimoAbsoluto = Math.min(...precios);
+     this.precioMaximoAbsoluto = Math.max(...precios);
+     this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
     });
-    this.sortOptions = [
-      { label: 'Menor precio a mayor', value: '!precio' },
-      { label: 'Mayor precio a menor', value: 'precio' },
-    ];
   }
 
   getSeverity(producto: Producto) {
@@ -135,6 +150,35 @@ export class ProductosComponent {
     this.products.set([...data]);
   });
   }
+  filtrarProductos()
+  {
+  let filtrados = [...this.productosOriginal];
+
+  if (this.filtroNombre.trim()) {
+    filtrados = filtrados.filter(p =>
+      p.nombre.toLowerCase().includes(this.filtroNombre.trim().toLowerCase())
+    );
+  }
+
+  if (this.filtroDescripcion.trim()) {
+    filtrados = filtrados.filter(p =>
+      p.descripcion.toLowerCase().includes(this.filtroDescripcion.trim().toLowerCase())
+    );
+  }
+
+  // Filtro de stock
+  if (this.filtroStock) {
+    filtrados = filtrados.filter(p => p.stock > 0);
+  }
+
+  // Filtro por slider de precio
+  const [minPrecio, maxPrecio] = this.filtroRangoPrecio;
+  filtrados = filtrados.filter(p => p.precio >= minPrecio && p.precio <= maxPrecio);
+
+  this.products.set(filtrados);
+  }
+
+
 
 
 }
