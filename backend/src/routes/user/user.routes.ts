@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { UserController as UserController } from "../../controller/user.controller";
 
-export const productoRouter = Router();
+export const userRouter = Router();
 
-const productoController = new UserController();
+const userController = new UserController();
 
-productoRouter.get('/login', productoController.logIn.bind(productoController));
-productoRouter.get('/usuarios', productoController.getTodosLosUsuarios.bind(productoController));
-productoRouter.post('/crearusuario', productoController.crearUsuario.bind(productoController));
-productoRouter.put('/actualizar/:id', productoController.updateUsuario.bind(productoController));
-productoRouter.delete('/eliminar/:id', productoController.eliminarUsuario.bind(productoController));
+userRouter.get('/login', userController.logIn.bind(userController));
+userRouter.get('/usuarios', userController.getTodosLosUsuarios.bind(userController));
+userRouter.post('/crearusuario', userController.crearUsuario);
+userRouter.put('/actualizar/:id', userController.updateUsuario.bind(userController));
+userRouter.delete('/eliminar/:id', userController.eliminarUsuario.bind(userController));
+
+export default userRouter;

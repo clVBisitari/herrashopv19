@@ -27,7 +27,7 @@ model Usuario {
   nombre    String
   email     String  @unique
   password  String
-  telefono  Int
+  telefono  BigInt
   direccion String
   ciudad    String
   pais      String

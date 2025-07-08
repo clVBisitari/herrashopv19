@@ -4,7 +4,6 @@ import { UserService } from '../service/user.service';
 import { UserRepository } from '../repository/user.repository';
 import { isStringObject } from 'node:util/types';
 
-
 export class UserController {
     private userService: UserService;
 
@@ -24,7 +23,7 @@ export class UserController {
             const producto = await this.userService.obtenerUsuarioPorId(usuario);
 
             console.log(producto);
-            
+
             if (!producto) {
                 return res.status(404).json({ message: 'usuario no encontrado' });
             }
@@ -48,9 +47,44 @@ export class UserController {
 
     public crearUsuario = async (req: Request, res: Response) => {
         try {
-            const data = req.body;
-            const nuevoProducto = await this.userService.crearUsuario(data);
-            res.status(201).json(nuevoProducto);
+            
+            const {
+                nombre,
+                email,
+                telefono,
+                direccion,
+                ciudad,
+                pais,
+                codigo_postal,
+                password,
+                rol
+            } = req.body;
+            const nuevoUsuario = {
+                nombre : nombre,
+                email: email,
+                telefono: BigInt(telefono),
+                direccion: direccion,
+                ciudad : ciudad,
+                pais: pais,
+                codigo_postal: codigo_postal,
+                password: password,
+                rol: rol || 'user'
+            };
+            const nuevoUser = await this.userService.crearUsuario(nuevoUsuario);
+            const userTypeSafe = {
+                id: nuevoUser.id,
+                nombre: nuevoUser.nombre,
+                email: nuevoUser.email,
+                telefono: nuevoUser.telefono.toString(), // Convert BigInt to string for JSON compatibility
+                direccion: nuevoUser.direccion,
+                ciudad: nuevoUser.ciudad,
+                pais: nuevoUser.pais,
+                codigo_postal: nuevoUser.codigo_postal,
+                fecha_registro: nuevoUser.fecha_registro,
+                rol: nuevoUser.rol
+            }
+            console.log('Nuevo usuario creado:', userTypeSafe);
+            res.status(201).json(userTypeSafe);
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: 'Error al crear el usuario', error });
