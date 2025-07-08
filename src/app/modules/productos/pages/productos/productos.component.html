@@ -1,36 +1,44 @@
 <div class="card">
     <div class="bg-white shadow-md rounded p-6 mb-6 w-full max-w-6xl mx-auto border border-gray-200">
       <h2 class="text-lg font-semibold text-gray-700 mb-4">Filtrar productos</h2>
-    
+
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
         <div class="flex flex-col">
           <label class="text-sm font-medium text-gray-600 mb-1">Nombre</label>
           <input pInputText type="text" [(ngModel)]="filtroNombre" (ngModelChange)="filtrarProductos()"
             placeholder="Ej: destornillador" class="w-full border border-gray-300 rounded px-3 py-2" />
         </div>
-    
+
         <div class="flex flex-col">
           <label class="text-sm font-medium text-gray-600 mb-1">Descripción</label>
           <input pInputText type="text" [(ngModel)]="filtroDescripcion" (ngModelChange)="filtrarProductos()"
             placeholder="Ej: herramienta manual" class="w-full border border-gray-300 rounded px-3 py-2" />
         </div>
-    
+
         <div class="flex flex-col">
           <label class="text-sm font-medium text-gray-600 mb-1">Con stock</label>
           <p-inputSwitch [(ngModel)]="filtroStock" (onChange)="filtrarProductos()"></p-inputSwitch>
         </div>
-    
+
         <div class="flex flex-col">
-          <label class="text-sm font-medium text-gray-600 mb-1">Rango de precio</label>
-          <p-slider [(ngModel)]="filtroRangoPrecio"
+            <label class="text-sm font-medium text-gray-600 mb-1">Rango de precio</label>
+            <p-slider [(ngModel)]="filtroRangoPrecio"
             [range]="true" [min]="precioMinimoAbsoluto" [max]="precioMaximoAbsoluto"
             (onChange)="filtrarProductos()"></p-slider>
-          <div class="text-xs text-gray-600 mt-1">
-            ${{ filtroRangoPrecio[0] }} – ${{ filtroRangoPrecio[1] }}
-          </div>
+            <div class="text-xs text-gray-600 mt-1">
+                ${{ filtroRangoPrecio[0] }} – ${{ filtroRangoPrecio[1] }}
+                <div class="flex justify-end mt-4">
+                     <button pButton type="button" label="Limpiar filtros" icon="pi pi-times"
+                     class="p-button-secondary"
+                     (click)="limpiarFiltros()">
+                     </button>
+                </div>
+            </div>
         </div>
       </div>
     </div>
+
+
 
     <p-dataview #dv [value]="products()" [sortField]="sortField" [sortOrder]="sortOrder" [rows]="20" [paginator]="true">
         <ng-template #header>

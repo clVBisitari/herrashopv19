@@ -82,14 +82,27 @@ export class ProductosComponent {
   
   ngOnInit() 
   {
-    this.productoService.getProductos().subscribe((data) => {
-     this.products.set([...data]);
-     this.productosOriginal = data;
+    this.productoService.getProductos().subscribe((data) => 
+    {
+      this.products.set([...data]);
+      this.productosOriginal = data;
+      
+      const precios = data.map(p => p.precio);
+      this.precioMinimoAbsoluto = Math.min(...precios);
+      this.precioMaximoAbsoluto = Math.max(...precios);
+      this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
+      
+      const filtrosGuardados = localStorage.getItem('filtrosProductos');
+      if (filtrosGuardados) 
+      {
+        const filtros = JSON.parse(filtrosGuardados);
+        this.filtroNombre = filtros.nombre || '';
+        this.filtroDescripcion = filtros.descripcion || '';
+        this.filtroStock = filtros.stock || false;
+        this.filtroRangoPrecio = filtros.rangoPrecio || [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
+      }
     
-     const precios = data.map(p => p.precio);
-     this.precioMinimoAbsoluto = Math.min(...precios);
-     this.precioMaximoAbsoluto = Math.max(...precios);
-     this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
+      this.filtrarProductos(); // ✅ aplica los filtros
     });
   }
 
@@ -131,7 +144,6 @@ export class ProductosComponent {
         };
         alert('✅ Producto creado correctamente');
         this.recargarProductos();
-        // this.recargarProductos(); // Descomentá si tenés una función para recargar productos
       },
       error: (err) => {
         console.error('Error al guardar producto:', err);
@@ -144,12 +156,20 @@ export class ProductosComponent {
     console.log('Page changed:', $event);
     // Aquí puedes manejar el cambio de página si es necesario
   }
-  recargarProductos() 
-  {
-  this.productoService.getProductos().subscribe((data) => {
-    this.products.set([...data]);
-  });
+
+
+ recargarProductos() 
+ {
+    this.productoService.getProductos().subscribe((data) =>
+    {
+      this.products.set([...data]);
+      this.productosOriginal = data;
+      this.filtrarProductos(); // ✅ reaplica los filtros
+    });
   }
+
+
+
   filtrarProductos()
   {
   let filtrados = [...this.productosOriginal];
@@ -176,9 +196,24 @@ export class ProductosComponent {
   filtrados = filtrados.filter(p => p.precio >= minPrecio && p.precio <= maxPrecio);
 
   this.products.set(filtrados);
+  localStorage.setItem('filtrosProductos', JSON.stringify({
+  nombre: this.filtroNombre,
+  descripcion: this.filtroDescripcion,
+  stock: this.filtroStock,
+  rangoPrecio: this.filtroRangoPrecio
+  }));
   }
 
+  limpiarFiltros() 
+  {
+  this.filtroNombre = '';
+  this.filtroDescripcion = '';
+  this.filtroStock = false;
+  this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
 
+  localStorage.removeItem('filtrosProductos');
+  this.filtrarProductos();
+  }
 
 
 }
