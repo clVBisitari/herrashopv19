@@ -2,9 +2,10 @@ import { prisma } from "../prisma";
 
 export class UserRepository {
 
-    async getUserById(id: number) {
+    async getUserByEmail(email: string) {
+        console.log("Fetching user by email:", email);
         return await prisma.usuario.findUnique({
-            where: { id }
+            where: { email }
         })
     }
     async getAllUsers() {
