@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { ProductoService } from '../service/producto.service';
 import { ProductoRepository } from '../repository/producto.repository';
+import { PrismaClient } from '@prisma/client';
+import { prisma } from '../prisma';
 
 export class ProductoController {
     private productoService: ProductoService;
@@ -42,33 +44,15 @@ export class ProductoController {
             res.status(500).json({ message: 'Error al obtener el producto', error });
         }
     }
-    public crearProducto = async (req: Request, res: Response) => {
-        try {
-            const {
-                nombre,
-                descripcion,
-                clasificacion,
-                precio,
-                stock,
-                imagen
-            } = req.body;
-            if (!nombre || !descripcion || !clasificacion || !precio || !stock || !imagen) {
-                return res.status(400).json({ message: 'Faltan datos para crear el producto' });
-            }
-
-            const nuevoProductoData = {
-                nombre,
-                descripcion,
-                clasificacion,
-                precio,
-                stock,
-                imagen
-            };
-            const nuevoProducto = await this.productoService.crearProducto(nuevoProductoData);
-            res.status(201).json(nuevoProducto);
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: 'Error al crear el producto', error });
-        }
-    }
+    public createProducto = async (req: Request, res: Response) => {
+      try {
+        const nuevoProducto = await prisma.producto.create({
+          data: req.body,
+        });
+        res.json(nuevoProducto);
+      } catch (error) {
+        console.error('Error al crear producto:', error);
+        res.status(500).json({ error: 'Error al crear el producto' });
+      }
+    };
 }

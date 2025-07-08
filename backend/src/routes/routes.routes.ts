@@ -8,8 +8,8 @@ export class AppRoutes {
 
         const router = Router();
 
-        router.use('/api/productos',productoRouter);
-        router.use('/api/favoritos', favoritoRoutes);
+        router.use('/productos', productoRouter);
+        router.use('/favoritos', favoritoRoutes);
         router.use(userRouter);
         return router;
     }
