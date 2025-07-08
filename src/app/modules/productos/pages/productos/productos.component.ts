@@ -115,6 +115,7 @@ export class ProductosComponent {
           imagen: ''
         };
         alert('✅ Producto creado correctamente');
+        this.recargarProductos();
         // this.recargarProductos(); // Descomentá si tenés una función para recargar productos
       },
       error: (err) => {
@@ -128,4 +129,12 @@ export class ProductosComponent {
     console.log('Page changed:', $event);
     // Aquí puedes manejar el cambio de página si es necesario
   }
+  recargarProductos() 
+  {
+  this.productoService.getProductos().subscribe((data) => {
+    this.products.set([...data]);
+  });
+  }
+
+
 }
