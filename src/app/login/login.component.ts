@@ -47,6 +47,9 @@ export class LoginComponent {
     this.http.post('/api/login', this.formGroup.value).subscribe({
       next: res => {
         console.log('✅ Login exitoso', res);
+        localStorage.setItem('usuarioId', res.id);
+        this.isLoggedIn = true; 
+        location.reload(); 
       },
       error: err => {
         console.error('❌ Error al loguear:', err);
