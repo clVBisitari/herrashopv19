@@ -1,9 +1,51 @@
 <div class="card">
-    <p-dataview #dv [value]="products()" [sortField]="sortField" [sortOrder]="sortOrder" [rows]="20" [paginator]="true">
+    <div class="bg-white shadow-md rounded p-6 mb-6 w-full max-w-6xl mx-auto border border-gray-200">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">Filtrar productos</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div class="flex flex-col">
+          <label class="text-sm font-medium text-gray-600 mb-1">Nombre</label>
+          <input pInputText type="text" [(ngModel)]="filtroNombre" (ngModelChange)="filtrarProductos()"
+            placeholder="Ej: destornillador" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-medium text-gray-600 mb-1">Descripción</label>
+          <input pInputText type="text" [(ngModel)]="filtroDescripcion" (ngModelChange)="filtrarProductos()"
+            placeholder="Ej: herramienta manual" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-sm font-medium text-gray-600 mb-1">Con stock</label>
+          <p-inputSwitch [(ngModel)]="filtroStock" (onChange)="filtrarProductos()"></p-inputSwitch>
+        </div>
+
+        <div class="flex flex-col">
+            <label class="text-sm font-medium text-gray-600 mb-1">Rango de precio</label>
+            <p-slider [(ngModel)]="filtroRangoPrecio"
+            [range]="true" [min]="precioMinimoAbsoluto" [max]="precioMaximoAbsoluto"
+            (onChange)="filtrarProductos()"></p-slider>
+            <div class="text-xs text-gray-600 mt-1">
+                ${{ filtroRangoPrecio[0] }} – ${{ filtroRangoPrecio[1] }}
+                <div class="flex justify-end mt-4">
+                     <button pButton type="button" label="Limpiar filtros" icon="pi pi-times"
+                     class="p-button-secondary"
+                     (click)="limpiarFiltros()">
+                     </button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <p-dataview #dv [value]="products()" [sortField]="sortField" [sortOrder]="sortOrder" [rows]="5" [paginator]="true">
         <ng-template #header>
             <div class="flex flex-col md:flex-row md:justify-between">
                 <p-select [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Ordenar por"
                     (onChange)="onSortChange($event)" class="mb-2 md:mb-0" />
+                    <p-button icon="pi pi-plus" label="Agregar Producto" (onClick)="abrirModal()" />
             </div>
         </ng-template>
         
@@ -20,8 +62,7 @@
                                     <img 
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                                         [src]="item.imagen"
-                                        [alt]="item.nombre" 
-                                        onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'"
+                                        [alt]="item.nombre"
                                     />
                                 </div>
                                 
@@ -74,7 +115,7 @@
                             <div class="flex flex-col items-end gap-4 flex-shrink-0">
                                 <div class="text-right">
                                     <span class="text-2xl font-bold text-green-400">
-                                        {{ item.precio | currency:'ARS':'symbol':'1.2-2' }}
+                                        {{ item.precio | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
                                     </span>
                                 </div>
                                 
@@ -107,17 +148,64 @@
                 </div>
             </div>
             
-            <div class="card flex justify-center mt-6">
-                <p-paginator 
-                    (onPageChange)="onPageChange($event)" 
-                    [first]="first" 
-                    [rows]="rows" 
-                    [totalRecords]="120"
-                    [rowsPerPageOptions]="[10, 20, 30]" 
-                />
-            </div>
         </ng-template>
     </p-dataview>
+
+    <!-- MODAL -->
+    <p-dialog header="Nuevo Producto" [(visible)]="modalVisible" [modal]="true" [style]="{ width: '500px' }">
+  <form #form="ngForm" (ngSubmit)="guardarProducto()" class="p-fluid space-y-4">
+    <div class="field">
+      <label for="nombre" class="font-semibold block mb-1">Nombre</label>
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-tag"></i>
+        <input pInputText id="nombre" [(ngModel)]="nuevoProducto.nombre" name="nombre" required class="w-full border border-green-300 rounded px-3 py-2" />
+      </span>
+    </div>
+
+    <div class="field">
+      <label for="descripcion" class="font-semibold block mb-1">Descripción</label>
+      <textarea pInputTextarea rows="2" autoResize id="descripcion"
+                [(ngModel)]="nuevoProducto.descripcion"
+                name="descripcion" required class="w-full border border-green-300 rounded px-3 py-2">
+       </textarea>
+    </div>
+
+    <div class="field">
+      <label for="clasificacion" class="font-semibold block mb-1">Clasificación</label>
+      <input pInputText id="clasificacion" [(ngModel)]="nuevoProducto.clasificacion"
+        name="clasificacion" required class="w-full border border-green-300 rounded px-3 py-2" />
+    </div>
+
+    <div class="field grid grid-cols-2 gap-4">
+      <div>
+        <label for="precio" class="font-semibold block mb-1">Precio</label>
+        <input pInputText type="number" id="precio" [(ngModel)]="nuevoProducto.precio"
+          name="precio" required class="w-full border border-green-300 rounded px-3 py-2" />
+      </div>
+      <div>
+        <label for="stock" class="font-semibold block mb-1">Stock</label>
+        <input pInputText type="number" id="stock" [(ngModel)]="nuevoProducto.stock"
+          name="stock" required class="w-full border border-green-300 rounded px-3 py-2" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="imagen" class="font-semibold block mb-1">Imagen (URL)</label>
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-image"></i>
+        <input pInputText id="imagen" [(ngModel)]="nuevoProducto.imagen"
+          name="imagen" required class="w-full border border-green-300 rounded px-3 py-2" />
+      </span>
+    </div>
+
+    <div class="pt-4 border-t mt-4 text-right">
+      <p-button label="Guardar Producto" icon="pi pi-check" type="submit" [disabled]="form.invalid" />
+    </div>
+  </form>
+    </p-dialog>
+
+
+
 </div>
 
 <router-outlet></router-outlet>
