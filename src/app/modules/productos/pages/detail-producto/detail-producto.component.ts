@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { CarritoService } from '../../../../services/carrito.service';
+import { FavoritoService } from '../../../../services/favorito.service';
 
 @Component({
   selector: 'app-detail-producto',
@@ -27,10 +28,12 @@ export class DetailProductoComponent implements OnInit, OnDestroy{
   productoService = inject(ProductoService); 
   carritoService = inject(CarritoService); 
   activatedRouter = inject(ActivatedRoute);
+  favoritoService = inject(FavoritoService);
   
   id: number | null = null;
   producto: Producto | undefined;
   cantidad: number = 1;
+  esFavorito: boolean = false;
 
   ngOnInit() {
     this.id = Number(this.activatedRouter.snapshot.paramMap.get('id'))
@@ -47,6 +50,9 @@ export class DetailProductoComponent implements OnInit, OnDestroy{
         next: (data) => {
           this.producto = data;
           console.log(data);
+          this.favoritoService.getFavoritos().subscribe((favoritos) => {
+          this.esFavorito = favoritos.some(f => f.productoId === this.producto?.id);
+});
         }, 
         error: (err) => {
           console.error('Error al cargar producto:', err);
@@ -79,7 +85,21 @@ export class DetailProductoComponent implements OnInit, OnDestroy{
       event.target.value = this.cantidad;
     } //cambiar numero manualmente
   }
+toggleFavorito() {
+  if (!this.producto) return;
 
+  const productoId = this.producto.id;
+
+  if (this.esFavorito) {
+    this.favoritoService.eliminarFavorito(productoId).subscribe(() => {
+      this.esFavorito = false;
+    });
+  } else {
+    this.favoritoService.agregarFavorito(productoId).subscribe(() => {
+      this.esFavorito = true;
+    });
+  }
+}
   agregarAlCarrito() {
     if (this.producto && this.cantidad > 0) {
       this.carritoService.agregarAlCarrito(this.producto, this.cantidad);
