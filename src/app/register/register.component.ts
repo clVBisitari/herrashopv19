@@ -12,19 +12,23 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../app/interfaces/user.interface';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environments';
+import { UserService } from '../services/user.service';
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [Toast, Ripple, DividerModule, ButtonModule, InputTextModule, ReactiveFormsModule],
-  providers: [MessageService],
+  providers: [MessageService, UserService],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  constructor(private fb: FormBuilder, private http: HttpClient, private messageService: MessageService, public router: Router) {
+  loginForm: FormGroup;
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private messageService: MessageService, private userService: UserService, public router: Router) {
+
     this.registerForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -35,6 +39,10 @@ export class RegisterComponent {
       codigo_postal: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       password2: ['', Validators.required]
+    });
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      pass: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -100,10 +108,29 @@ export class RegisterComponent {
 
 
   login() {
-    // Aquí podrías redirigir a una página de inicio de sesión o realizar alguna acción adicional
-    alert('Redirigiendo a la página de inicio de sesión...');
-    // Por ejemplo, podrías redirigir a una ruta de inicio de sesión:
-    // this.router.navigate(['/login']);
+    const {email, pass} = this.loginForm.value;
+    console.log('Usuario:', email);
+    console.log('password:', pass);
+
+    if (!email || !pass) {
+      alert('Por favor, completa todos los campos');
+      return;
+    }
+
+    if (this.loginForm.invalid) return;
+
+    this.userService.login(email, pass).subscribe({
+      next: (res) => {
+        alert('Inicio de sesión exitoso');
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Inicio de sesión exitoso!' });
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error al iniciar sesión');
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al iniciar sesión' });
+      }
+    });
   }
 
 }
