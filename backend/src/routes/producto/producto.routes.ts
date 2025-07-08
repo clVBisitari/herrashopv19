@@ -7,3 +7,5 @@ const productoController = new ProductoController();
 productoRouter.get('/', productoController.getAllProductos.bind(productoController));
 productoRouter.get('/:id', productoController.getProducto.bind(productoController));
 productoRouter.post('/', productoController.createProducto.bind(productoController));
+
+export default productoRouter;

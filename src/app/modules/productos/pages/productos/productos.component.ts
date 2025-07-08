@@ -10,17 +10,17 @@ import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../../../services/carrito.service';
 import { PaginatorModule } from 'primeng/paginator';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { SliderModule } from 'primeng/slider';
 
 @Component({
   selector: 'app-productos',
-  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule,  DialogModule, InputSwitchModule, SliderModule],
+  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule, RouterOutlet, RouterLink,  DialogModule, InputSwitchModule, SliderModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
-  providers: [ProductoService, CarritoService, PaginatorModule]
+  providers: [ProductoService, PaginatorModule]
 })
 export class ProductosComponent {
  constructor(public router: Router){}
