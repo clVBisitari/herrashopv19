@@ -1,9 +1,8 @@
-import { Component, OnInit, inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CarritoService } from '../../../services/carrito.service';
 import { CarritoItem } from '../../../interfaces/carrito.interface';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-carrito',
@@ -11,58 +10,47 @@ import { Subscription } from 'rxjs';
   templateUrl: './carrito.component.html',
   styleUrl: './carrito.component.css'
 })
-export class CarritoComponent implements OnInit, OnDestroy {
+export class CarritoComponent implements OnInit {
   carritoService = inject(CarritoService);
   
   carritoItems: CarritoItem[] = [];
   total: number = 0;
   cantidadTotal: number = 0;
 
-  private subscriptions: Subscription[] = [];
-
   ngOnInit() {
-    // ✅ SUSCRIBIRSE A LOS OBSERVABLES EN LUGAR DE cargarCarrito():
-    this.subscriptions.push(
-      this.carritoService.carritoItems$.subscribe(items => {
-        this.carritoItems = items;
-      }),
-      
-      this.carritoService.total$.subscribe(total => {
-        this.total = total;
-      }),
-      
-      this.carritoService.cantidadTotal$.subscribe(cantidad => {
-        this.cantidadTotal = cantidad;
-      })
-    );
+    this.cargarCarrito();
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+  cargarCarrito() {
+    this.carritoItems = this.carritoService.obtenerItems();
+    this.total = this.carritoService.obtenerTotal();
+    this.cantidadTotal = this.carritoService.obtenerCantidadTotal();
   }
-
-  // ✅ REMOVER cargarCarrito() - ya no es necesario
 
   actualizarCantidad(itemId: number, nuevaCantidad: number) {
     this.carritoService.actualizarCantidad(itemId, nuevaCantidad);
-    // ✅ REMOVER this.cargarCarrito() - se actualiza automáticamente
+    this.cargarCarrito(); 
   }
 
   eliminarItem(itemId: number) {
     this.carritoService.eliminarDelCarrito(itemId);
-    // ✅ REMOVER this.cargarCarrito() - se actualiza automáticamente
+    this.cargarCarrito(); 
   }
 
   vaciarCarrito() {
     if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
       this.carritoService.vaciarCarrito();
-      // ✅ REMOVER this.cargarCarrito() - se actualiza automáticamente
+      this.cargarCarrito(); 
     }
   }
-
-  procederAlCheckout() {
+  procederAlCheckout(){
     if (this.carritoItems.length === 0) {
       alert('El carrito está vacío. Agrega productos antes de proceder al checkout.');
+      return;
     }
+    // Aquí podrías redirigir a una página de checkout o realizar alguna acción adicional
+    alert('Procediendo al checkout...');
+    // Por ejemplo, podrías redirigir a una ruta de checkout:
+    // this.router.navigate(['/checkout']);
   }
 }

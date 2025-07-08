@@ -1,14 +1,45 @@
+<div class="flex flex-col min-h-screen bg-slate-950">
 
-<div class="flex flex-col gap-4 min-h-screen">
-  <!-- Header -->
-  <div class="bg-blue-200 w-full">
-    <h1 class="text-5xl text-center text-blue-900 font-extrabold">Herrashop</h1>
-    <app-login></app-login>
-  </div>
-  <main class="flex-grow">
+  <header class="bg-slate-900 border-b border-slate-700 shadow-xl">
+    <div class="container mx-auto px-4">
+     
+      <div class="flex items-center justify-center py-6 border-b border-slate-700">
+        <div class="flex items-center gap-4">
+      
+          
+         <div class="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg">
+            <img 
+              src="/Herrashop_logo.png" 
+              alt="Herrashop Logo" 
+              class="w-full h-full object-contain"
+            />
+          </div>
+      
+
+          <div class="text-center">
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-wide">
+              Herra<span class="text-blue-400">shop</span>
+            </h1>
+            <p class="text-sm text-gray-400 font-medium tracking-widest uppercase">
+              Herramientas Profesionales
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="py-2">
+        <app-login></app-login>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="flex-grow bg-slate-900">
     <router-outlet></router-outlet>
   </main>
-</div>
-<div class="div">
-<app-footer></app-footer>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 border-t border-slate-700">
+    <app-footer></app-footer>
+  </footer>
 </div>
