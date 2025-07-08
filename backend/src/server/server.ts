@@ -1,35 +1,32 @@
 import express, { Router } from 'express';
 import cors from 'cors';
+import { productoRouter } from '../routes/producto/producto.routes';
 
 interface Options {
-    port: number;
-    routes:Router
+  port: number;
+  routes: Router;
 }
 
 export class Server {
+  private app = express();
+  private readonly port: number;
+  private readonly routes: Router;
 
-    private app = express()
+  constructor(options: Options) {
+    const { port, routes } = options;
+    this.port = port;
+    this.routes = routes;
+  }
 
-    private readonly port:number;
-    private readonly routes:Router;
+  async start() {
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(cors());
 
-    constructor(options:Options){
-        const {port,routes} = options
-        this.port = port 
-        this.routes = routes
-    }
+    this.app.use('/api/productos', productoRouter); 
 
-    async start() {
-
-        this.app.use(express.json())
-        this.app.use(express.urlencoded({extended : true}))
-
-        this.app.use(cors())
-
-        this.app.use(this.routes);
-
-        this.app.listen(this.port, ()=>{
-            console.log("Servidor corriendo en el puerto " + this.port + "desde el directorio " + process.cwd());
-        })
-     }
+    this.app.listen(this.port, () => {
+      console.log("Servidor corriendo en el puerto " + this.port + " desde " + process.cwd());
+    });
+  }
 }

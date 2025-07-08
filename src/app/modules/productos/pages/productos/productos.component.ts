@@ -11,10 +11,11 @@ import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../../../services/carrito.service';
 import { PaginatorModule } from 'primeng/paginator';
 import { Router } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-productos',
-  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule],
+  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule,  DialogModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
   providers: [ProductoService, CarritoService, PaginatorModule]
@@ -30,6 +31,16 @@ export class ProductosComponent {
   paginatorRows: number = 10;
   first: any;
   rows: any;
+  modalVisible: boolean = false;
+
+  nuevoProducto = {
+    nombre: '',
+    descripcion: '',
+    clasificacion: '',
+    precio: 0,
+    stock: 0,
+    imagen: ''
+  };
 
   onSortChange($event: SelectChangeEvent) {
 
@@ -55,6 +66,7 @@ export class ProductosComponent {
   sortOptions: any[];
   sortKey: any;
 
+  
   ngOnInit() {
     this.productoService.getProductos().subscribe((data) => {
       const d = data.slice(0, 20);
@@ -84,7 +96,35 @@ export class ProductosComponent {
     alert(`Producto ${producto.nombre} agregado al carrito`);
   }
 
-  onPageChange($event) {
+  abrirModal() 
+  {
+    this.modalVisible = true;
+  }
+
+  guardarProducto() 
+  {
+    this.productoService.crearProducto(this.nuevoProducto).subscribe({
+      next: () => {
+        this.modalVisible = false;
+        this.nuevoProducto = {
+          nombre: '',
+          descripcion: '',
+          clasificacion: '',
+          precio: 0,
+          stock: 0,
+          imagen: ''
+        };
+        alert('✅ Producto creado correctamente');
+        // this.recargarProductos(); // Descomentá si tenés una función para recargar productos
+      },
+      error: (err) => {
+        console.error('Error al guardar producto:', err);
+        alert('❌ Error al guardar producto');
+      }
+    });
+  }
+    onPageChange($event) 
+  {
     console.log('Page changed:', $event);
     // Aquí puedes manejar el cambio de página si es necesario
   }

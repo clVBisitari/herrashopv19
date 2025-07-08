@@ -39,7 +39,9 @@ export class ProductoService {
     const producto = this.productos.find(p => p.id === id);
     return of(producto);
   }*/
-
-    
 }
+crearProducto(data: any): Observable<any> {
+  return this.http.post(`${environment.api_url}/productos`, data);
+}
+    
 }
