@@ -25,11 +25,11 @@ export class Server {
         this.app.use(express.urlencoded({extended : true}))
 
         this.app.use(cors())
-
-        this.app.use(this.routes);
+        
+        this.app.use('/api',this.routes);
 
         this.app.listen(this.port, ()=>{
-            console.log("Servidor corriendo en el puerto " + this.port + "desde el directorio " + process.cwd());
+            console.log("Servidor corriendo en el puerto " + this.port + " desde el directorio " + process.cwd());
         })
      }
 }
