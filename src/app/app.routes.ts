@@ -25,6 +25,10 @@ export const routes: Routes = [
     path: 'carrito',
     component: CarritoComponent
   },
+  {
+  path: 'favoritos',
+  loadComponent: () => import('./modules/favoritos/favoritos.component').then(m => m.FavoritosComponent)
+}
   // {
   //   path: '',
   //   redirectTo: '/login',

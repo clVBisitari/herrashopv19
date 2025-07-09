@@ -2,9 +2,8 @@ import { Routes } from '@angular/router';
 
 export const productosRoutes: Routes = [
   {
-    path: '',  // Ruta vacía para /productos
+    path: '',
       loadComponent: () => import('./productos/productos.component').then(m => m.ProductosComponent),
-
   },
   {
     path: 'detail-producto/:id',

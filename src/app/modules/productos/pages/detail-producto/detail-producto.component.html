@@ -17,12 +17,8 @@
         <div class="md:flex">
           <div class="md:w-1/2">
             <div class="h-96 bg-slate-700 flex items-center justify-center overflow-hidden">
-              <img 
-                [src]="producto.imagen" 
-                [alt]="producto.nombre"
-                class="w-full h-full object-cover"
-                onerror="this.src='https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&h=300&fit=crop&crop=center'"
-              />
+              <img [src]="producto.imagen" [alt]="producto.nombre" class="w-full h-full object-cover"
+                onerror="this.src='https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&h=300&fit=crop&crop=center'" />
             </div>
           </div>
 
@@ -37,10 +33,8 @@
                 <span class="text-3xl font-bold text-green-400">
                   ${{ producto.precio | number:'1.0-0' }}
                 </span>
-                <span 
-                  class="px-3 py-1 text-sm rounded-full"
-                  [class]="producto.stock > 0 ? 'bg-green-800 text-green-200' : 'bg-red-800 text-red-200'"
-                >
+                <span class="px-3 py-1 text-sm rounded-full"
+                  [class]="producto.stock > 0 ? 'bg-green-800 text-green-200' : 'bg-red-800 text-red-200'">
                   {{ producto.stock > 0 ? 'Disponible' : 'Sin stock' }}
                 </span>
               </div>
@@ -53,58 +47,42 @@
               <div class="flex items-center space-x-4 mb-6">
                 <label class="text-sm font-medium text-gray-300">Cantidad:</label>
                 <div class="flex items-center border border-slate-600 rounded-md bg-slate-700">
-                  <button 
-                    type="button"
+                  <button type="button"
                     class="px-3 py-1 text-gray-300 hover:bg-slate-600 rounded-l-md transition-colors"
-                    [disabled]="cantidad <= 1"
-                    [class.opacity-50]="cantidad <= 1"
-                    [class.cursor-not-allowed]="cantidad <= 1"
-                    (click)="decrementarCantidad()"
-                  >
+                    [disabled]="cantidad <= 1" [class.opacity-50]="cantidad <= 1"
+                    [class.cursor-not-allowed]="cantidad <= 1" (click)="decrementarCantidad()">
                     -
                   </button>
-                  <input 
-                    type="number" 
-                    [(ngModel)]="cantidad"
-                    min="1" 
-                    [max]="producto?.stock" 
+                  <input type="number" [(ngModel)]="cantidad" min="1" [max]="producto?.stock"
                     class="w-16 text-center border-none outline-none py-1 bg-slate-700 text-white"
-                    (change)="onCantidadChange($event)"
-                  >
-                  <button 
-                    type="button"
+                    (change)="onCantidadChange($event)">
+                  <button type="button"
                     class="px-3 py-1 text-gray-300 hover:bg-slate-600 rounded-r-md transition-colors"
                     [disabled]="producto && cantidad >= producto.stock"
                     [class.opacity-50]="producto && cantidad >= producto.stock"
-                    [class.cursor-not-allowed]="producto && cantidad >= producto.stock"
-                    (click)="incrementarCantidad()"
-                  >
+                    [class.cursor-not-allowed]="producto && cantidad >= producto.stock" (click)="incrementarCantidad()">
                     +
                   </button>
                 </div>
                 <span class="text-sm text-gray-400">Stock: {{ producto?.stock }}</span>
               </div>
 
-              <button
-                type="button"
+              <button type="button"
                 class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                [disabled]="producto?.stock === 0"
-                [class.opacity-50]="producto?.stock === 0"
-                [class.cursor-not-allowed]="producto?.stock === 0"
-                (click)="agregarAlCarrito()"
-              >
+                [disabled]="producto?.stock === 0" [class.opacity-50]="producto?.stock === 0"
+                [class.cursor-not-allowed]="producto?.stock === 0" (click)="agregarAlCarrito()">
                 <i class="pi pi-shopping-cart mr-2"></i>
                 Agregar al carrito
               </button>
 
               <div class="flex space-x-2">
-                <button type="button" 
-                        class="flex-1 border border-slate-600 text-gray-300 py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
-                  <i class="pi pi-heart mr-2"></i>
-                  Favoritos
+                <button type="button" (click)="toggleFavorito()"
+                  class="flex-1 border border-slate-600 text-gray-300 py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
+                  <i class="pi" [ngClass]="esFavorito ? 'pi-heart-fill text-red-500' : 'pi-heart'"></i>
+                  {{ esFavorito ? 'Quitar de Favoritos' : 'Favoritos' }}
                 </button>
-                <button type="button" 
-                        class="flex-1 border border-slate-600 text-gray-300 py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
+                <button type="button"
+                  class="flex-1 border border-slate-600 text-gray-300 py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
                   <i class="pi pi-share-alt mr-2"></i>
                   Compartir
                 </button>
@@ -136,4 +114,3 @@
     </div>
   </div>
 </div>
-

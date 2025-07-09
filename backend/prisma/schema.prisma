@@ -16,6 +16,8 @@ model Producto {
   precio        Float
   imagen        String
   stock         Int
+
+  favoritos     ProductoFavorito[]
 }
 
 model Usuario {
@@ -29,5 +31,20 @@ model Usuario {
   pais      String
   codigo_postal String
   fecha_registro DateTime @default(now())
-  rol            String   @default("user") // 'admin' | 'user'
+  rol            String   @default("user")
+
+   favoritos      ProductoFavorito[]
+}
+
+model ProductoFavorito {
+  id         Int      @id @default(autoincrement())
+  usuarioId  Int
+  productoId Int
+
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+  producto   Producto @relation(fields: [productoId], references: [id])
+
+  createdAt  DateTime @default(now())
+
+  @@unique([usuarioId, productoId])
 }

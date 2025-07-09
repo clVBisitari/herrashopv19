@@ -13,7 +13,7 @@ export class UserService {
                 const encryptedPassword = await bcrypt.hash(password, 10);
                 const isMatch = await bcrypt.compare(encryptedPassword, user.password);
                 if (!isMatch) {
-                    return null; // Contraseña incorrecta
+                    return null;
                 }
             }
             console.log("paso por aca sin password");

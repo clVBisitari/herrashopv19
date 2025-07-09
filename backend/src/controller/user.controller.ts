@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-// Update the import path if the file is in a different location, for example:
 import { UserService } from '../service/user.service';
 import { UserRepository } from '../repository/user.repository';
 import { isStringObject } from 'node:util/types';
@@ -27,7 +26,7 @@ export class UserController {
                 id: user.id,
                 nombre: user.nombre,
                 email: user.email,
-                telefono: user.telefono.toString(), // Convert BigInt to string for JSON compatibility
+                telefono: user.telefono.toString(),
                 direccion: user.direccion,
                 ciudad: user.ciudad,
                 pais: user.pais,
@@ -89,7 +88,7 @@ export class UserController {
                 id: nuevoUser.id,
                 nombre: nuevoUser.nombre,
                 email: nuevoUser.email,
-                telefono: nuevoUser.telefono.toString(), // Convert BigInt to string for JSON compatibility
+                telefono: nuevoUser.telefono.toString(),
                 direccion: nuevoUser.direccion,
                 ciudad: nuevoUser.ciudad,
                 pais: nuevoUser.pais,
@@ -134,7 +133,7 @@ export class UserController {
                 id: user.id,
                 nombre: user.nombre,
                 email: user.email,
-                telefono: user.telefono.toString(), // Convert BigInt to string for JSON compatibility
+                telefono: user.telefono.toString(),
                 direccion: user.direccion,
                 ciudad: user.ciudad,
                 pais: user.pais,
