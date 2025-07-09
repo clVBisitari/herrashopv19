@@ -45,14 +45,21 @@ export class ProductoController {
         }
     }
     public createProducto = async (req: Request, res: Response) => {
-      try {
-        const nuevoProducto = await prisma.producto.create({
-          data: req.body,
-        });
-        res.json(nuevoProducto);
-      } catch (error) {
-        console.error('Error al crear producto:', error);
-        res.status(500).json({ error: 'Error al crear el producto' });
-      }
+     try {
+       // Validar que solo usuarios admin puedan crear productos
+       const userRol = req.body.rol;
+       if (userRol !== 'admin') {
+         return res.status(403).json({ error: 'No tienes permiso para crear productos' });
+       }
+    
+       const nuevoProducto = await prisma.producto.create({
+         data: req.body,
+       });
+       res.json(nuevoProducto);
+     } catch (error) {
+       console.error('Error al crear producto:', error);
+       res.status(500).json({ error: 'Error al crear el producto' });
+     }
     };
+
 }
