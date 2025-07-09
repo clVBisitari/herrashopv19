@@ -4,13 +4,21 @@ import { environment } from '../environments/environments';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Favorito } from '../interfaces/favorito.interface';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  crearUsuario(arg0: { nombre: any; email: any; telefono: any; direccion: any; ciudad: any; pais: any; codigo_postal: any; password: any; rol: string; }):Observable<any> {
+  
+
+  private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
+  public loggedIn$ = this.loggedInSubject.asObservable();
+
+  crearUsuario(arg0: { nombre: any; email: any; telefono: any; direccion: any; ciudad: any; pais: any; codigo_postal: any; password: any; rol: string; }): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
 
@@ -24,8 +32,8 @@ export class UserService {
         })
       );
   }
-  
-  getUserPorEmail(email: any):Observable<any> {
+
+  getUserPorEmail(email: any): Observable<any> {
     if (!email) {
       return of(null); // Return null if email is not provided
     }
@@ -38,10 +46,10 @@ export class UserService {
         })
       );
   }
-  
+
   constructor() { }
   http = inject(HttpClient);
-  
+
   private readonly key = 'isLoggedIn';
 
   private readonly LOGIN_KEY = 'isLoggedIn';
@@ -56,11 +64,13 @@ export class UserService {
   setLoginState(loggedIn: boolean): void {
     if (this.isBrowser()) {
       localStorage.setItem(this.LOGIN_KEY, String(loggedIn));
+      this.loggedInSubject.next(loggedIn);
     }
   }
 
   setUser(user: any): void {
     if (this.isBrowser()) {
+      console.log("Setting user in localStorage:", user);
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     }
   }
@@ -92,7 +102,8 @@ export class UserService {
       .pipe(
         map((res) => {
           if (res) {
-            localStorage.setItem(this.LOGIN_KEY, 'true');
+            this.setLoginState(true);
+            this.setUser(res);
           }
           return res;
         })
@@ -103,6 +114,7 @@ export class UserService {
     if (this.isBrowser()) {
       localStorage.removeItem(this.LOGIN_KEY);
       localStorage.removeItem(this.USER_KEY);
+      this.loggedInSubject.next(false);
     }
   }
 }

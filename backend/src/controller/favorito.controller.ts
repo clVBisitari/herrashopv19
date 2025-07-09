@@ -35,7 +35,7 @@ export class FavoritoController {
       }
 
       const favorito = await this.favoritoService.agregarFavorito(usuarioId, productoId);
-      res.status(201).json(favorito);
+      res.status(200).json(favorito);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error al agregar favorito', error });

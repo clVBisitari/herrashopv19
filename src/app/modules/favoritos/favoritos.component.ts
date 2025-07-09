@@ -44,6 +44,7 @@ export class FavoritosComponent implements OnInit {
   }
 
   eliminar(id: number): void {
+    console.log('Eliminando favorito con ID:', id);
     this.favoritoService.eliminarFavorito(id).subscribe({
       next: () => {
         const actual = this.favoritos();

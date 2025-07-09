@@ -7,19 +7,19 @@
     No tenés productos favoritos aún.
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6" *ngIf="!cargando && favoritos().length > 0">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6" *ngIf="!cargando && favoritos().length > 0">
     <div 
-      *ngFor="let fav of favoritos()" 
+      *ngFor="let prodFav of favoritos()" 
       class="flex flex-col sm:flex-row sm:items-center p-6 gap-4 bg-slate-800 rounded-lg shadow-lg hover:shadow-xl hover:bg-slate-700 transition-all duration-300"
     >
       <!-- Imagen -->
       <div class="flex-shrink-0">
-        <a [routerLink]="['/productos/detail-producto', fav.producto?.id]" class="block relative group cursor-pointer">
+        <a [routerLink]="['/productos/detail-producto', prodFav.id]" class="block relative group cursor-pointer">
           <div class="w-32 h-32 md:w-40 md:h-40 bg-slate-700 rounded-lg overflow-hidden border border-slate-600">
             <img 
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-              [src]="fav.producto?.imagen"
-              [alt]="fav.producto?.nombre" 
+              [src]="prodFav.imagen"
+              [alt]="prodFav.nombre" 
               onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'" 
             />
           </div>
@@ -37,14 +37,14 @@
         <div class="flex flex-col justify-between items-start gap-3 flex-1">
           <div>
             <span class="font-medium text-blue-400 text-sm uppercase tracking-wide">
-              {{ fav.producto?.clasificacion }}
+              {{ prodFav.clasificacion }}
             </span>
 
             <a 
-              [routerLink]="['/productos/detail-producto', fav.producto?.id]" 
+              [routerLink]="['/productos/detail-producto', prodFav.id]" 
               class="block text-xl font-semibold text-white mt-1 hover:text-blue-400 transition-colors cursor-pointer"
             >
-              {{ fav.producto?.nombre }}
+              {{ prodFav.nombre }}
             </a>
 
             <div class="flex items-center gap-2 mt-2">
@@ -52,12 +52,12 @@
               <span 
                 class="px-3 py-1 rounded-full text-sm font-medium"
                 [ngClass]="{
-                  'bg-green-800 text-green-200': fav.producto?.stock > 10,
-                  'bg-yellow-800 text-yellow-200': fav.producto?.stock <= 10 && fav.producto?.stock > 0,
-                  'bg-red-800 text-red-200': fav.producto?.stock === 0
+                  'bg-green-800 text-green-200': prodFav.stock > 10,
+                  'bg-yellow-800 text-yellow-200': prodFav.stock <= 10 && prodFav.stock > 0,
+                  'bg-red-800 text-red-200': prodFav.stock === 0
                 }"
               >
-                {{ fav.producto?.stock }} unidades
+                {{ prodFav.stock }} unidades
               </span>
             </div>
           </div>
@@ -65,7 +65,7 @@
           <div class="flex items-center gap-2">
             <div class="flex items-center bg-yellow-800 px-2 py-1 rounded-full">
               <span class="text-yellow-200 font-medium text-sm mr-1">
-                {{ fav.producto?.rating }}
+                {{ prodFav.rating }}
               </span>
               <i class="pi pi-star-fill text-yellow-400 text-sm"></i>
             </div>
@@ -75,7 +75,7 @@
         <div class="flex flex-col items-end gap-4 flex-shrink-0">
           <div class="text-right">
             <span class="text-2xl font-bold text-green-400">
-              {{ fav.producto?.precio | currency:'ARS':'symbol':'1.2-2' }}
+              {{ prodFav.precio | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
             </span>
           </div>
 
@@ -85,24 +85,22 @@
               severity="danger" 
               [rounded]="true"
               size="small"
-              (onClick)="eliminar(fav.id)"
+              (onClick)="eliminar(prodFav.id)"
               tooltipPosition="top"
-            >
-              <ng-template pTemplate="tooltip">Quitar de favoritos</ng-template>
-            </p-button>
+             />
 
             <p-button 
               icon="pi pi-shopping-cart"
               label="Agregar al carrito"
-              [disabled]="fav.producto?.stock < 1" 
-              (onClick)="agregarAlCarrito(fav.producto)"
-              [class.opacity-50]="fav.producto?.stock < 1"
+              [disabled]="prodFav.stock < 1" 
+              (onClick)="agregarAlCarrito(prodFav)"
+              [class.opacity-50]="prodFav.stock < 1"
               size="small"
             />
           </div>
 
           <a 
-            [routerLink]="['/productos/detail-producto', fav.producto?.id]" 
+            [routerLink]="['/productos/detail-producto', prodFav.id]" 
             class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
           >
             Ver detalles completos →

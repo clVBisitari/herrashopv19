@@ -138,30 +138,34 @@ export class RegisterComponent {
   }
 
 
-  login() {
+  login():boolean {
     const { email, pass } = this.loginForm.value;
     console.log('Usuario:', email);
     console.log('password:', pass);
 
     if (!email || !pass) {
       alert('Por favor, completa todos los campos');
-      return;
+      return false;
     }
 
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) return false;
 
     this.userService.login(email, pass).subscribe({
       next: (res) => {
         alert('Inicio de sesión exitoso');
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Inicio de sesión exitoso!' });
+
         this.router.navigate(['/']);
+        return true;
       },
       error: (err) => {
         console.error(err);
         alert('Error al iniciar sesión');
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al iniciar sesión' });
+        return false;
       }
     });
+    return false;
   }
 
 }

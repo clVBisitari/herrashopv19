@@ -19,21 +19,21 @@ import { SliderModule } from 'primeng/slider';
 
 @Component({
   selector: 'app-productos',
-  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule, RouterOutlet, RouterLink,TooltipModule,  DialogModule, InputSwitchModule, SliderModule],
+  imports: [DataView, ButtonModule, Tag, CommonModule, SelectModule, FormsModule, PaginatorModule, RouterOutlet, RouterLink, TooltipModule, DialogModule, InputSwitchModule, SliderModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
   providers: [ProductoService, PaginatorModule]
 })
 export class ProductosComponent {
- constructor(public router: Router){}
+  constructor(public router: Router) { }
 
   productoService = inject(ProductoService);
   carritoService = inject(CarritoService);
   favoritoService = inject(FavoritoService);
 
   products = signal<any>([]);
-  favoritos = signal<number[]>([]);
-  
+  favoritos = signal<Set<number>>(new Set());
+
 
   items: any[] = [];
   totalRecords: number = 0;
@@ -48,7 +48,7 @@ export class ProductosComponent {
   filtroDescripcion: string = '';
   filtroPrecioMin: number | null = null;
   filtroPrecioMax: number | null = null;
-  productosOriginal: any[] = []; 
+  productosOriginal: any[] = [];
   filtroStock: boolean = false;
   filtroRangoPrecio: [number, number] = [0, 10000]; // 
   precioMinimoAbsoluto: number = 0;
@@ -69,32 +69,30 @@ export class ProductosComponent {
   sortOptions: any[];
   sortKey: any;
 
-  
-  ngOnInit() 
-  {
-    this.productoService.getProductos().subscribe((data) => 
-    {
+
+  ngOnInit() {
+    this.productoService.getProductos().subscribe((data) => {
       this.products.set([...data]);
       this.favoritoService.getFavoritos().subscribe((favoritos) => {
-      this.favoritos.set(favoritos.map((f: any) => f.productoId));
+        const ids = favoritos.map((f) => f.productoId);
+        this.favoritos.set(new Set(ids));
       });
       this.productosOriginal = data;
-      
+
       const precios = data.map(p => p.precio);
       this.precioMinimoAbsoluto = Math.min(...precios);
       this.precioMaximoAbsoluto = Math.max(...precios);
       this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
-      
+
       const filtrosGuardados = localStorage.getItem('filtrosProductos');
-      if (filtrosGuardados) 
-      {
+      if (filtrosGuardados) {
         const filtros = JSON.parse(filtrosGuardados);
         this.filtroNombre = filtros.nombre || '';
         this.filtroDescripcion = filtros.descripcion || '';
         this.filtroStock = filtros.stock || false;
         this.filtroRangoPrecio = filtros.rangoPrecio || [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
       }
-    
+
       this.filtrarProductos(); // ✅ aplica los filtros
     });
   }
@@ -111,7 +109,7 @@ export class ProductosComponent {
     }
   }
 
- onSortChange($event: SelectChangeEvent) {
+  onSortChange($event: SelectChangeEvent) {
 
     this.sortField = $event.value;
     if (this.sortField) {
@@ -133,13 +131,11 @@ export class ProductosComponent {
     alert(`Producto ${producto.nombre} agregado al carrito`);
   }
 
-  abrirModal() 
-  {
+  abrirModal() {
     this.modalVisible = true;
   }
 
-  guardarProducto() 
-  {
+  guardarProducto() {
     this.productoService.crearProducto(this.nuevoProducto).subscribe({
       next: () => {
         this.modalVisible = false;
@@ -160,17 +156,14 @@ export class ProductosComponent {
       }
     });
   }
-    onPageChange($event) 
-  {
+  onPageChange($event) {
     console.log('Page changed:', $event);
     // Aquí puedes manejar el cambio de página si es necesario
   }
 
 
- recargarProductos() 
- {
-    this.productoService.getProductos().subscribe((data) =>
-    {
+  recargarProductos() {
+    this.productoService.getProductos().subscribe((data) => {
       this.products.set([...data]);
       this.productosOriginal = data;
       this.filtrarProductos(); // ✅ reaplica los filtros
@@ -179,68 +172,67 @@ export class ProductosComponent {
 
 
 
-  filtrarProductos()
-  {
-  let filtrados = [...this.productosOriginal];
+  filtrarProductos() {
+    let filtrados = [...this.productosOriginal];
 
-  if (this.filtroNombre.trim()) {
-    filtrados = filtrados.filter(p =>
-      p.nombre.toLowerCase().includes(this.filtroNombre.trim().toLowerCase())
-    );
+    if (this.filtroNombre.trim()) {
+      filtrados = filtrados.filter(p =>
+        p.nombre.toLowerCase().includes(this.filtroNombre.trim().toLowerCase())
+      );
+    }
+
+    if (this.filtroDescripcion.trim()) {
+      filtrados = filtrados.filter(p =>
+        p.descripcion.toLowerCase().includes(this.filtroDescripcion.trim().toLowerCase())
+      );
+    }
+
+    // Filtro de stock
+    if (this.filtroStock) {
+      filtrados = filtrados.filter(p => p.stock > 0);
+    }
+
+    // Filtro por slider de precio
+    const [minPrecio, maxPrecio] = this.filtroRangoPrecio;
+    filtrados = filtrados.filter(p => p.precio >= minPrecio && p.precio <= maxPrecio);
+
+    this.products.set(filtrados);
+    localStorage.setItem('filtrosProductos', JSON.stringify({
+      nombre: this.filtroNombre,
+      descripcion: this.filtroDescripcion,
+      stock: this.filtroStock,
+      rangoPrecio: this.filtroRangoPrecio
+    }));
   }
 
-  if (this.filtroDescripcion.trim()) {
-    filtrados = filtrados.filter(p =>
-      p.descripcion.toLowerCase().includes(this.filtroDescripcion.trim().toLowerCase())
-    );
+  limpiarFiltros() {
+    this.filtroNombre = '';
+    this.filtroDescripcion = '';
+    this.filtroStock = false;
+    this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
+
+    localStorage.removeItem('filtrosProductos');
+    this.filtrarProductos();
   }
 
-  // Filtro de stock
-  if (this.filtroStock) {
-    filtrados = filtrados.filter(p => p.stock > 0);
-  }
-
-  // Filtro por slider de precio
-  const [minPrecio, maxPrecio] = this.filtroRangoPrecio;
-  filtrados = filtrados.filter(p => p.precio >= minPrecio && p.precio <= maxPrecio);
-
-  this.products.set(filtrados);
-  localStorage.setItem('filtrosProductos', JSON.stringify({
-  nombre: this.filtroNombre,
-  descripcion: this.filtroDescripcion,
-  stock: this.filtroStock,
-  rangoPrecio: this.filtroRangoPrecio
-  }));
-  }
-
-  limpiarFiltros() 
-  {
-  this.filtroNombre = '';
-  this.filtroDescripcion = '';
-  this.filtroStock = false;
-  this.filtroRangoPrecio = [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
-
-  localStorage.removeItem('filtrosProductos');
-  this.filtrarProductos();
-  }
-
-toggleFavorito(productoId: number) {
-  const actuales = this.favoritos();
-  const yaEsFavorito = actuales.includes(productoId);
+  toggleFavorito(productoId: number) {
+  const actuales = new Set(this.favoritos()); // hacemos una copia para evitar mutaciones directas
+  const yaEsFavorito = actuales.has(productoId);
 
   if (yaEsFavorito) {
     this.favoritoService.eliminarFavorito(productoId).subscribe(() => {
-      this.favoritos.set(actuales.filter(id => id !== productoId));
+      actuales.delete(productoId);
+      this.favoritos.set(actuales);
     });
   } else {
     this.favoritoService.agregarFavorito(productoId).subscribe(() => {
-      this.favoritos.set([...actuales, productoId]);
+      actuales.add(productoId);
+      this.favoritos.set(actuales);
     });
   }
 }
 
   esFavorito(productoId: number): boolean {
-  return this.favoritos().includes(productoId);
-
+    return this.favoritos().has(productoId);
   }
 }

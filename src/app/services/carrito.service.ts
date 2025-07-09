@@ -30,11 +30,10 @@ export class CarritoService {
     const carritoGuardado = localStorage.getItem('carrito');
     if (carritoGuardado) {
       this.carritoItems = JSON.parse(carritoGuardado);
-      this.notificarCambios(); // ✅ NUEVO
+      this.notificarCambios();
     }
   }
 
-  // ✅ MÉTODO NUEVO - Este es la clave:
   private notificarCambios() {
     this.carritoItemsSubject.next([...this.carritoItems]);
     this.cantidadTotalSubject.next(this.obtenerCantidadTotal());
@@ -42,8 +41,9 @@ export class CarritoService {
   }
 
   private guardarEnLocalStorage() {
+    console.log('Guardando carrito en localStorage:', this.carritoItems);
     localStorage.setItem('carrito', JSON.stringify(this.carritoItems));
-    this.notificarCambios(); // ✅ AGREGAR ESTA LÍNEA
+    this.notificarCambios();
   }
 
   agregarAlCarrito(producto: Producto, cantidad: number = 1) {
@@ -65,7 +65,7 @@ export class CarritoService {
       this.carritoItems.push(nuevoItem);
     }
     
-    this.guardarEnLocalStorage(); // ✅ ESTO NOTIFICA LOS CAMBIOS
+    this.guardarEnLocalStorage();
   }
 
   actualizarCantidad(itemId: number, nuevaCantidad: number) {
@@ -78,18 +78,18 @@ export class CarritoService {
     if (item) {
       item.cantidad = nuevaCantidad;
       item.subtotal = item.precio * nuevaCantidad;
-      this.guardarEnLocalStorage(); // ✅ AGREGAR
+      this.guardarEnLocalStorage();
     }
   }
 
   eliminarDelCarrito(itemId: number) {
     this.carritoItems = this.carritoItems.filter(item => item.id !== itemId);
-    this.guardarEnLocalStorage(); // ✅ AGREGAR
+    this.guardarEnLocalStorage();
   }
 
   vaciarCarrito() {
     this.carritoItems = [];
-    this.guardarEnLocalStorage(); // ✅ AGREGAR
+    this.guardarEnLocalStorage();
   }
 
   obtenerItems(): CarritoItem[] {
@@ -98,9 +98,10 @@ export class CarritoService {
 
   obtenerTotal(): number {
     return this.carritoItems.reduce((total, item) => total + item.subtotal, 0);
-  } //lo que hace el reduce es definir el total y el item, y va sumando el subtotal de cada item al total
+  }
 
   obtenerCantidadTotal(): number {
     return this.carritoItems.reduce((total, item) => total + item.cantidad, 0);
-  } //mismo que arriba pero con cantidad de items
+  }
+  
 }
