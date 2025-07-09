@@ -53,6 +53,7 @@ export class ProductosComponent {
   filtroRangoPrecio: [number, number] = [0, 10000];
   precioMinimoAbsoluto: number = 0;
   precioMaximoAbsoluto: number = 10000;
+  esAdmin: boolean = false;
 
 
   nuevoProducto = {
@@ -78,7 +79,8 @@ export class ProductosComponent {
         this.favoritos.set(new Set(ids));
       });
       this.productosOriginal = data;
-
+      const rol = localStorage.getItem('userRol');
+      this.esAdmin = rol === 'admin';
       const precios = data.map(p => p.precio);
       this.precioMinimoAbsoluto = Math.min(...precios);
       this.precioMaximoAbsoluto = Math.max(...precios);
@@ -92,8 +94,8 @@ export class ProductosComponent {
         this.filtroStock = filtros.stock || false;
         this.filtroRangoPrecio = filtros.rangoPrecio || [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
       }
-
-      this.filtrarProductos();
+    
+      this.filtrarProductos(); 
     });
   }
 
@@ -135,8 +137,14 @@ export class ProductosComponent {
     this.modalVisible = true;
   }
 
-  guardarProducto() {
-    this.productoService.crearProducto(this.nuevoProducto).subscribe({
+  guardarProducto() 
+  {
+    const productoConRol = 
+    {
+    ...this.nuevoProducto,
+    rol: localStorage.getItem('userRol') // es adm o no ? 
+    };
+    this.productoService.crearProducto(productoConRol).subscribe({
       next: () => {
         this.modalVisible = false;
         this.nuevoProducto = {
@@ -147,7 +155,7 @@ export class ProductosComponent {
           stock: 0,
           imagen: ''
         };
-        alert('✅ Producto creado correctamente');
+        alert(' Producto creado correctamente');
         this.recargarProductos();
       },
       error: (err) => {
@@ -165,7 +173,7 @@ export class ProductosComponent {
     this.productoService.getProductos().subscribe((data) => {
       this.products.set([...data]);
       this.productosOriginal = data;
-      this.filtrarProductos();
+      this.filtrarProductos(); 
     });
   }
 
