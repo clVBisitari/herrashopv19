@@ -228,11 +228,15 @@ export class ProductosComponent {
     this.favoritoService.agregarFavorito(productoId).subscribe(() => {
       actuales.add(productoId);
       this.favoritos.set(actuales);
+      localStorage.setItem('favoritos', JSON.stringify([...actuales]));
     });
   }
 }
 
   esFavorito(productoId: number): boolean {
-    return this.favoritos().has(productoId);
+    console.log('Verificando si es favorito:', productoId);
+    let estaEnFav =  this.favoritos().has(productoId);
+    console.log('Resultado de verificación:', estaEnFav);
+    return estaEnFav;
   }
 }
