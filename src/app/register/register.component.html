@@ -1,74 +1,49 @@
 <div class="card">
 
-    <div class="flex flex-col md:flex-row">
+    <div class="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat px-4" style="background-image: url('/Herrashop_logo.png')">
 
-        <form [formGroup]="loginForm" (ngSubmit)="login()"
-            class="w-full md:w-5/12 flex flex-col items-center gap-3 py-5">
-            <h2 class="text-3xl font-bold text-center">Iniciar sesión</h2>
-            <p class="text-center">Ingresa tus credenciales para acceder a tu cuenta</p>
-
-            <div class="flex flex-col gap-2">
-                <label for="email">Email</label>
-                <input pInputText id="email" type="text" formControlName="email" />
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <label for="password">Contraseña</label>
-                <input pInputText id="pass" type="password" formControlName="pass" />
-            </div>
-
-            <div class="flex">
-                <p-button label="Iniciar sesión" type="submit" icon="pi pi-user" class="w-full max-w-[17.35rem]"
-                    styleClass="w-full mx-auto" />
-            </div>
-        </form>
-
-        <div class="w-full md:w-2/12">
-            <p-divider layout="vertical" class="!hidden md:!flex"><b>O BIEN</b></p-divider>
-            <p-divider layout="horizontal" class="!flex md:!hidden" align="center"><b>O BIEN</b></p-divider>
-        </div>
         <form [formGroup]="registerForm" (ngSubmit)="goToRegister()"
-            class="w-full md:w-5/12 flex flex-col items-center justify-center gap-3 py-5">
+            class="w-full max-w-xl md:w-5/12 flex flex-col items-center justify-center gap-3 py-5">
             <h2 class="text-3xl font-bold text-center">Registrarse</h2>
             <p class="text-center">Registrate para obtener todos nuestros beneficios</p>
 
             <div class="flex flex-col gap-2">
                 <label for="username">Nombre y apellido</label>
-                <input pInputText id="nombre" type="text" formControlName="nombre" />
+                <input pInputText id="nombre" type="text" formControlName="nombre" class="w-[500px]" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="email">E-mail</label>
-                <input pInputText id="email" type="text" formControlName="email" />
+                <label for="email" class ="text-slate-200">E-mail</label>
+                <input pInputText id="email" type="text" formControlName="email" class="w-[500px] bg-gray"/>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="telefono">Teléfono</label>
-                <input pInputText id="telefono" type="text" formControlName="telefono" />
+                <input pInputText id="telefono" type="text" formControlName="telefono" class="w-[500px]"/>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="direccion">Dirección</label>
-                <input pInputText id="direccion" type="text" formControlName="direccion" />
+                <input pInputText id="direccion" type="text" formControlName="direccion" class="w-[500px]"/>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="ciudad">Ciudad</label>
-                <input pInputText id="ciudad" type="text" formControlName="ciudad" />
+                <input pInputText id="ciudad" type="text" formControlName="ciudad" class="w-[500px]"/>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="pais">País</label>
-                <input pInputText id="pais" type="text" formControlName="pais" />
+                <input pInputText id="pais" type="text" formControlName="pais" class="w-[500px]"/>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="codigo_postal">Código Postal</label>
-                <input pInputText id="codigo_postal" type="text" formControlName="codigo_postal" />
+                <input pInputText id="codigo_postal" type="text" formControlName="codigo_postal" class="w-[500px]"/>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="password">Contraseña</label>
-                <input pInputText id="password" type="password" formControlName="password" />
+                <input pInputText id="password" type="password" formControlName="password" class="w-[500px]"/>
             </div>
 
             <div class="flex flex-col gap-2">
                 <label for="password2">Repetir contraseña</label>
-                <input pInputText id="password2" type="password" formControlName="password2" toggleMask="true" />
+                <input pInputText id="password2" type="password" formControlName="password2" toggleMask="true" class="w-[500px]"/>
             </div>
 
             <div class="flex">
