@@ -10,12 +10,11 @@ import { Producto } from '../interfaces/producto.interface';
 export class CarritoService {
   private carritoItems: CarritoItem[] = [];
   
-  // ✅ AGREGAR ESTOS OBSERVABLES:
+  
   private carritoItemsSubject = new BehaviorSubject<CarritoItem[]>([]);
   private cantidadTotalSubject = new BehaviorSubject<number>(0);
   private totalSubject = new BehaviorSubject<number>(0);
   
-  // Observables públicos
   carritoItems$ = this.carritoItemsSubject.asObservable();
   cantidadTotal$ = this.cantidadTotalSubject.asObservable();
   total$ = this.totalSubject.asObservable();

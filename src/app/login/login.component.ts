@@ -2,11 +2,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Route, RouterLink } from '@angular/router';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PasswordModule } from 'primeng/password';  // Importing PasswordModule from PrimeNG
+import { PasswordModule } from 'primeng/password';
 import { HttpClient } from '@angular/common/http';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { Router } from '@angular/router'; // Importing Router for navigation
+import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { User } from '../interfaces/user.interface';
 import { Subscription } from 'rxjs';
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: ['', Validators.required]
     });
   }
-  isLoggedIn: boolean = false; // Variable to track login status
+  isLoggedIn: boolean = false;
   user: User | null = null;
 
 
@@ -74,8 +74,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   logout() {
     this.userService.logout();
-    this.isLoggedIn = false; // Update login status
-    this.formGroup.reset(); // Reset the form
-    this.router.navigate(['/']); // Redirect to home page
+    this.isLoggedIn = false;
+    this.formGroup.reset();
+    this.router.navigate(['/']);
   }
 }

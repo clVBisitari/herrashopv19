@@ -50,7 +50,7 @@ export class ProductosComponent {
   filtroPrecioMax: number | null = null;
   productosOriginal: any[] = [];
   filtroStock: boolean = false;
-  filtroRangoPrecio: [number, number] = [0, 10000]; // 
+  filtroRangoPrecio: [number, number] = [0, 10000];
   precioMinimoAbsoluto: number = 0;
   precioMaximoAbsoluto: number = 10000;
 
@@ -93,7 +93,7 @@ export class ProductosComponent {
         this.filtroRangoPrecio = filtros.rangoPrecio || [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
       }
 
-      this.filtrarProductos(); // ✅ aplica los filtros
+      this.filtrarProductos();
     });
   }
 
@@ -158,7 +158,6 @@ export class ProductosComponent {
   }
   onPageChange($event) {
     console.log('Page changed:', $event);
-    // Aquí puedes manejar el cambio de página si es necesario
   }
 
 
@@ -166,7 +165,7 @@ export class ProductosComponent {
     this.productoService.getProductos().subscribe((data) => {
       this.products.set([...data]);
       this.productosOriginal = data;
-      this.filtrarProductos(); // ✅ reaplica los filtros
+      this.filtrarProductos();
     });
   }
 
@@ -216,7 +215,7 @@ export class ProductosComponent {
   }
 
   toggleFavorito(productoId: number) {
-  const actuales = new Set(this.favoritos()); // hacemos una copia para evitar mutaciones directas
+  const actuales = new Set(this.favoritos());
   const yaEsFavorito = actuales.has(productoId);
 
   if (yaEsFavorito) {

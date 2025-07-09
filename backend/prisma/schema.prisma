@@ -31,7 +31,7 @@ model Usuario {
   pais      String
   codigo_postal String
   fecha_registro DateTime @default(now())
-  rol            String   @default("user") // 'admin' | 'user'
+  rol            String   @default("user")
 
    favoritos      ProductoFavorito[]
 }
