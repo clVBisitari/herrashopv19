@@ -43,6 +43,7 @@ export class ProductosComponent {
   filtroRangoPrecio: [number, number] = [0, 10000]; // 
   precioMinimoAbsoluto: number = 0;
   precioMaximoAbsoluto: number = 10000;
+  esAdmin: boolean = false;
 
 
   nuevoProducto = {
@@ -86,7 +87,8 @@ export class ProductosComponent {
     {
       this.products.set([...data]);
       this.productosOriginal = data;
-      
+      const rol = localStorage.getItem('userRol');
+      this.esAdmin = rol === 'admin';
       const precios = data.map(p => p.precio);
       this.precioMinimoAbsoluto = Math.min(...precios);
       this.precioMaximoAbsoluto = Math.max(...precios);
@@ -102,7 +104,7 @@ export class ProductosComponent {
         this.filtroRangoPrecio = filtros.rangoPrecio || [this.precioMinimoAbsoluto, this.precioMaximoAbsoluto];
       }
     
-      this.filtrarProductos(); // ✅ aplica los filtros
+      this.filtrarProductos(); 
     });
   }
 
@@ -131,7 +133,12 @@ export class ProductosComponent {
 
   guardarProducto() 
   {
-    this.productoService.crearProducto(this.nuevoProducto).subscribe({
+    const productoConRol = 
+    {
+    ...this.nuevoProducto,
+    rol: localStorage.getItem('userRol') // es adm o no ? 
+    };
+    this.productoService.crearProducto(productoConRol).subscribe({
       next: () => {
         this.modalVisible = false;
         this.nuevoProducto = {
@@ -142,7 +149,7 @@ export class ProductosComponent {
           stock: 0,
           imagen: ''
         };
-        alert('✅ Producto creado correctamente');
+        alert(' Producto creado correctamente');
         this.recargarProductos();
       },
       error: (err) => {
@@ -154,7 +161,6 @@ export class ProductosComponent {
     onPageChange($event) 
   {
     console.log('Page changed:', $event);
-    // Aquí puedes manejar el cambio de página si es necesario
   }
 
 
@@ -164,7 +170,7 @@ export class ProductosComponent {
     {
       this.products.set([...data]);
       this.productosOriginal = data;
-      this.filtrarProductos(); // ✅ reaplica los filtros
+      this.filtrarProductos(); 
     });
   }
 

@@ -43,26 +43,36 @@ export class LoginComponent {
   value3: string = '';
 
   onSubmit() {
-    this.userService.login(this.formGroup.value.username, this.formGroup.value.password).subscribe({
-      next: (response) => {
-        console.log('Login exitoso:', response);
-        this.user = response;
-        this.isLoggedIn = true;
-        this.userService.setLoginState(true);
-        this.userService.setUser(response); 
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        console.error('Login fallo:', error);
-        alert('El Login falló. Por favor compruebe sus credenciales.');
-      }
-    });
-  }
+  this.userService.login(this.formGroup.value.username, this.formGroup.value.password).subscribe({
+    next: (response) => {
+      console.log('Login exitoso:', response);
+
+      this.user = response;
+      this.isLoggedIn = true;
+
+      localStorage.setItem('userRol', response.rol); // <-- Acá se guarda el rol
+      localStorage.setItem('userNombre', response.nombre); // Opcional
+      localStorage.setItem('userId', response.id); // Si querés usarlo más adelante
+      this.userService.setLoginState(true);
+      this.userService.setUser(response);
+
+      this.router.navigate(['/']);
+    },
+    error: (error) => {
+      console.error('Login falló:', error);
+      alert('El Login falló. Por favor compruebe sus credenciales.');
+    }
+  });
+}
+
 
   logout() {
     this.userService.logout();
     this.isLoggedIn = false; // Update login status
     this.formGroup.reset(); // Reset the form
     this.router.navigate(['/']); // Redirect to home page
+    localStorage.removeItem('userRol');
+    localStorage.removeItem('userNombre');
+    localStorage.removeItem('userId');
   }
 }
