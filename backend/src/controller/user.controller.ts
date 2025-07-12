@@ -17,7 +17,7 @@ export class UserController {
         try {
             const email = String(req.body.email);
             console.log('Email recibido:', email);
-            if (isStringObject(email)) {
+            if (!isStringObject(email)) {
                 return res.status(400).json({ message: 'usuario inválido' });
             }
 

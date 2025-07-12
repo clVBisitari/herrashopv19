@@ -50,10 +50,11 @@ export class ProductoController {
        if (userRol !== 'admin') {
          return res.status(403).json({ error: 'No tienes permiso para crear productos' });
        }
-    
-       const nuevoProducto = await prisma.producto.create({
-         data: req.body,
-       });
+       const nuevoProducto = await this.productoService.crearProducto(req.body);
+
+    //    const nuevoProducto = await prisma.producto.create({
+    //      data: req.body,
+    //    });
        res.json(nuevoProducto);
      } catch (error) {
        console.error('Error al crear producto:', error);

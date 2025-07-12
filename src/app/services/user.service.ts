@@ -16,6 +16,7 @@ export class UserService {
   
 
   private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
+  
   public loggedIn$ = this.loggedInSubject.asObservable();
 
   crearUsuario(arg0: { nombre: any; email: any; telefono: any; direccion: any; ciudad: any; pais: any; codigo_postal: any; password: any; rol: string; }): Observable<any> {
@@ -26,7 +27,10 @@ export class UserService {
       .pipe(
         map((res) => {
           if (res) {
-            localStorage.setItem(this.LOGIN_KEY, 'true');
+            this.login(arg0.email, arg0.password).subscribe(() => {
+              this.setLoginState(true);
+              this.setUser(res);
+            });
           }
           return res;
         })
@@ -66,6 +70,14 @@ export class UserService {
       localStorage.setItem(this.LOGIN_KEY, String(loggedIn));
       this.loggedInSubject.next(loggedIn);
     }
+  }
+
+  getLoginState(): boolean {
+    if (this.isBrowser()) {
+      const state = localStorage.getItem(this.LOGIN_KEY);
+      return state === 'true';
+    }
+    return false;
   }
 
   setUser(user: any): void {

@@ -2,13 +2,13 @@ import { UserRepository } from "../repository/user.repository";
 import bcrypt from 'bcryptjs';
 
 export class UserService {
-    constructor(private productoRepository: UserRepository) { }
+    constructor(private userRepository: UserRepository) { }
 
     async obtenerUsuarioPorEmail(email: string, password: string = '') {
 
         try {
 
-            let user = await this.productoRepository.getUserByEmail(email);
+            let user = await this.userRepository.getUserByEmail(email);
             if (user && password) {
                 const encryptedPassword = await bcrypt.hash(password, 10);
                 const isMatch = await bcrypt.compare(encryptedPassword, user.password);
@@ -16,7 +16,6 @@ export class UserService {
                     return null;
                 }
             }
-            console.log("paso por aca sin password");
             return user;
         } catch (error) {
             console.error("Error al obtener el usuario por email:", error);
@@ -25,7 +24,7 @@ export class UserService {
     }
 
     async obtenerTodosLosUsuarios() {
-            return await this.productoRepository.getAllUsers();
+            return await this.userRepository.getAllUsers();
         }
 
     async crearUsuario(data: any) {
@@ -33,14 +32,14 @@ export class UserService {
             if (data.password) {
                 data.password = await bcrypt.hash(data.password, 10);
             }
-            return await this.productoRepository.createUser(data);
+            return await this.userRepository.createUser(data);
         }
 
     async actualizarUsuario(id: number, data: any) {
-            return await this.productoRepository.updateUser(id, data);
+            return await this.userRepository.updateUser(id, data);
         }
 
     async eliminarUsuario(id: number) {
-            return await this.productoRepository.deleteUser(id);
+            return await this.userRepository.deleteUser(id);
         }
     }

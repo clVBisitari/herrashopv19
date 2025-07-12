@@ -23,17 +23,8 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit, OnDestroy {
 
   private subscription!: Subscription;
-  ngOnInit() {
-    this.isLoggedIn = this.userService.isLoggedIn();
-    this.subscription = this.userService.loggedIn$.subscribe(value => {
-      this.isLoggedIn = value;
-    });
-  }
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
+  isLoggedIn: boolean = false;
+  user: User | null = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient, private userService: UserService, public router: Router) {
 
@@ -42,10 +33,18 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: ['', Validators.required]
     });
   }
-  isLoggedIn: boolean = false;
-  user: User | null = null;
-
-
+  ngOnInit() {
+    this.isLoggedIn = this.userService.getLoginState();
+    this.user = this.userService.getUser();
+    // this.subscription = this.userService.loggedIn$.subscribe(value => {
+    //   this.isLoggedIn = value;
+    // });
+  }
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
   goToRegister() {
     this.router.navigate(['/register']);
@@ -85,8 +84,5 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoggedIn = false; // Update login status
     this.formGroup.reset(); // Reset the form
     this.router.navigate(['/']); // Redirect to home page
-    localStorage.removeItem('userRol');
-    localStorage.removeItem('userNombre');
-    localStorage.removeItem('userId');
   }
 }
